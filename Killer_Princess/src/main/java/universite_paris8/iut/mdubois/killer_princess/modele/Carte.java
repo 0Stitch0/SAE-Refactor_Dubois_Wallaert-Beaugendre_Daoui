@@ -1,3 +1,4 @@
+
 package universite_paris8.iut.mdubois.killer_princess.modele;
 
 
@@ -55,7 +56,7 @@ public class Carte {
             this.carte = new int[][] {
                     {21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21},
                     {21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21},
-                    {8, 12, 12, 12, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 12, 12, 12, 12, 12, 21, 21, 21, 21, 21, 21, 21, 21, 21},
+                    {8, 12, 12, 12, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 12, 12, 12, 12, 12, 21, 21, 21, 21, 21, 21, 21},
                     {21, 21, 21, 12, 21, 21, 21, 21, 21, 21, 21, 21, 12, 12, 12, 12, 12, 21, 21, 21, 12, 21, 21, 21, 21, 21, 21, 21, 21, 21},
                     {21, 21, 21, 12, 12, 21, 12, 12, 12, 12, 12, 12, 12, 21, 21, 21, 21, 21, 21, 21, 12, 21, 21, 12, 12, 12, 12, 12, 21, 21},
                     {21, 21, 21, 21, 12, 12, 12, 21, 21, 21, 21, 21, 21, 21, 21, 21, 12, 12, 12, 12, 12, 21, 21, 12, 21, 21, 21, 12, 21, 21},
@@ -284,21 +285,33 @@ public class Carte {
     }
 
     public boolean peutPoserPiege(double pixelX, double pixelY, String typePiege) {
-        //Convertit les pixels en index de case (ligne/colonne)
+        // Convertir les pixels en coordonnées de la carte
         int col = (int) (pixelX / tailleTuile);
         int lig = (int) (pixelY / tailleTuile);
 
-        if (lig >= 0 && lig < carte.length && col >= 0 && col < carte[0].length) {
-
-            int idTuile = carte[lig][col];
-
-            if (modeJeu == 2 && (typePiege.equals("TOUR_ARCHERS") || typePiege.equals("CANON"))) {
-                return idTuile == 21; //map2 : tours uniquement sur les 20
-            }
-
-            //map1 ou autres pièges : uniquement sur herbe
-            return idTuile >= 12 && idTuile < 20;
+        // Vérifier que la position est dans la carte
+        if (lig < 0 || lig >= carte.length
+                || col < 0 || col >= carte[0].length) {
+            return false;
         }
-        return false;       // Hors de la carte = interdit
+
+        int idTuile = carte[lig][col];
+
+        return estTuileAutorisee(idTuile, typePiege);
+    }
+
+    private boolean estTuileAutorisee(int idTuile, String typePiege) {
+        // Sur la carte 2, les tours et les canons se posent sur la tuile 21
+        if (modeJeu == 2 && estTourOuCanon(typePiege)) {
+            return idTuile == 21;
+        }
+
+        // Les autres pièges se posent sur les tuiles d'herbe
+        return idTuile >= 12 && idTuile < 20;
+    }
+
+    private boolean estTourOuCanon(String typePiege) {
+        return "TOUR_ARCHERS".equals(typePiege)
+                || "CANON".equals(typePiege);
     }
 }
