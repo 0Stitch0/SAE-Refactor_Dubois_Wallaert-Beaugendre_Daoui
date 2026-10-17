@@ -95,38 +95,61 @@ public class Jeu {
 
     // Met à jour les ennemis et les pièges
     public void mettreAJour() {
-        // Déplacement des ennemis
-        for (int i = 0; i < listeEnnemis.size(); i++) {
-            Ennemi e = listeEnnemis.get(i);
+        deplacerEnnemis();
+
+        ArrayList<Ennemi> ennemisVivants = obtenirEnnemisVivants();
+
+        faireAttaquerPieges(ennemisVivants);
+
+        supprimerEnnemisMorts();
+
+        supprimerPiegesDetruits();
+    }
+
+    // Déplace les ennemis présents sur la carte
+    private void deplacerEnnemis() {
+        for (Ennemi e : listeEnnemis) {
             if (e != null) {
                 e.mouvementAutoVersObjctif();
             }
         }
+    }
 
-        // Récupération des ennemis vivants pour les attaques
+    // Récupère les ennemis vivants pour les attaques des pièges
+    private ArrayList<Ennemi> obtenirEnnemisVivants() {
         ArrayList<Ennemi> ennemisVivants = new ArrayList<>();
+
         for (Ennemi e : listeEnnemis) {
             if (!e.estMort()) {
                 ennemisVivants.add(e);
             }
         }
 
-        // Les pièges attaquent les ennemis vivants
+        return ennemisVivants;
+    }
+
+    // Fait attaquer les pièges contre les ennemis vivants
+    private void faireAttaquerPieges(ArrayList<Ennemi> ennemisVivants) {
         for (Piege p : listePieges) {
             p.attaqueE(ennemisVivants);
         }
+    }
 
-        // Suppression des ennemis morts et récupération de leur prime
+    // Supprime les ennemis morts et récupère leur prime
+    private void supprimerEnnemisMorts() {
         for (int i = 0; i < listeEnnemis.size(); i++) {
             Ennemi e = listeEnnemis.get(i);
+
             if (e.estMort()) {
                 supprimerEnnemi(e);
                 ajouterOr(e.getPrime());
                 i--;
             }
         }
+    }
 
-        // Suppression des pièges détruits
+    // Supprime les pièges qui ne sont plus en place
+    private void supprimerPiegesDetruits() {
         for (int i = 0; i < listePieges.size(); i++) {
             if (!listePieges.get(i).enPlace()) {
                 retirerPiege(listePieges.get(i));
