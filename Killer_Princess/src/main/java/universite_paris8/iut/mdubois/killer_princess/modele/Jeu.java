@@ -65,6 +65,7 @@ public class Jeu {
         }
 
         int cout = fabriquePiege.getCoutPour(type);
+
         if (!aAssezOr(cout)) {
             return false;
         }
@@ -187,12 +188,15 @@ public class Jeu {
 
         if (piege != null) {
             int cout = piege.getCoutAmelioration();
-            if (this.or.get() >= cout && piege.getNiveau() < piege.getNivMax()) {
+
+            if (this.or.get() >= cout
+                    && piege.getNiveau() < piege.getNivMax()) {
                 depenserOr(cout);
                 piege.amelioration();
             } else {
                 System.out.println("Pas assez d'or pour améliorer !");
             }
+
             deselectionner();
         }
     }
@@ -207,30 +211,42 @@ public class Jeu {
         }
     }
 
+    // Recherche l'ennemi dont le chemin vers la porte est le plus court
     public Ennemi trouverEnnemiLePlusProche() {
         Ennemi plusProche = null;
+        double distanceMin = Double.MAX_VALUE;
 
-        if (!this.listeEnnemis.isEmpty()) {
-            double distanceMin = Double.MAX_VALUE;
+        for (Ennemi e : this.listeEnnemis) {
+            double distance = calculerDistanceDepuisPorte(e);
 
-            for (Ennemi e : this.listeEnnemis) {
-                int col = (int) (e.getX() / tailleTuile);
-                int lig = (int) (e.getY() / tailleTuile);
-                Case caseEnnemi = this.carte.getCaseAlgo(col, lig);
-
-                if (caseEnnemi != null) {
-                    Bfs bfs = new Bfs(this.carte, porte);
-                    ArrayList<Case> chemin = bfs.cheminVersSource(caseEnnemi);
-
-                    if (chemin != null && chemin.size() < distanceMin) {
-                        distanceMin = chemin.size();
-                        plusProche = e;
-                    }
-                }
+            if (distance < distanceMin) {
+                distanceMin = distance;
+                plusProche = e;
             }
         }
 
         return plusProche;
+    }
+
+    // Calcule la longueur du chemin entre un ennemi et la porte avec BFS
+    private double calculerDistanceDepuisPorte(Ennemi e) {
+        int col = (int) (e.getX() / tailleTuile);
+        int lig = (int) (e.getY() / tailleTuile);
+
+        Case caseEnnemi = this.carte.getCaseAlgo(col, lig);
+
+        if (caseEnnemi == null) {
+            return Double.MAX_VALUE;
+        }
+
+        Bfs bfs = new Bfs(this.carte, porte);
+        ArrayList<Case> chemin = bfs.cheminVersSource(caseEnnemi);
+
+        if (chemin == null) {
+            return Double.MAX_VALUE;
+        }
+
+        return chemin.size();
     }
 
     public void declencherBouleDeFeu() {
@@ -258,6 +274,7 @@ public class Jeu {
                 }
             }
         }
+
         return false;
     }
 
@@ -281,6 +298,7 @@ public class Jeu {
     // Sélection d'un piège
     public void selectionnerPiege(Piege p) {
         this.piegeSelectionne = p;
+
         if (p != null) {
             System.out.println("Piège sélectionné (Niveau "
                     + p.getNiveau() + ")");
@@ -341,6 +359,7 @@ public class Jeu {
 
     public Piege getPiegeEn(int ligne, int colonne) {
         int i = 0;
+
         while (listePieges.size() > i
                 && getXCase(listePieges.get(i)) != ligne
                 && getYCase(listePieges.get(i)) != colonne) {
@@ -350,6 +369,7 @@ public class Jeu {
         if (i >= listePieges.size()) {
             return null;
         }
+
         return listePieges.get(i);
     }
 
@@ -373,6 +393,7 @@ public class Jeu {
         if (this.listePieges.isEmpty()) {
             return null;
         }
+
         return this.listePieges.get(this.listePieges.size() - 1);
     }
 }
