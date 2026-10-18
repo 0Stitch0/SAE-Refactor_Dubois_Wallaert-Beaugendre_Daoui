@@ -27,7 +27,6 @@ import static universite_paris8.iut.mdubois.killer_princess.controleur.Controleu
 public class Controleur implements Initializable {
     private Carte carte;
     private VueCarte vueCarte;
-    private Ennemi ennemis;
     private VueEnnemis vueEnnemis;
     private VuePiege vuePiege;
     private VueProjectil vueProjectil;
@@ -42,7 +41,7 @@ public class Controleur implements Initializable {
     private boolean isPaused = false;
     private boolean defaite = false;
     private boolean modeRapideDeclenche = false;
-    private java.util.ArrayList<Ennemi> fileAttenteSpawn = new java.util.ArrayList<>();
+    private ArrayList<Ennemi> fileAttenteSpawn = new ArrayList<>();
     @FXML BorderPane root;
     @FXML private Pane paneEntitee, menuJeu;
     @FXML private StackPane inventaire, ecranFinPartie;
@@ -50,27 +49,19 @@ public class Controleur implements Initializable {
     @FXML private VBox cartePiege1, cartePiege2, cartePiege3, cartePiege4, cartePiege5, cartePiege6;
     @FXML private TilePane panneauTuile;
     @FXML private Label goldDisplay, waveDisplay, chrono;
-    @FXML private ImageView BARRICADE_BOIS, TRAPPE, MAGMA, TOUR_ARCHERS, CANON;//image pour piege
+    @FXML private ImageView BARRICADE_BOIS, TRAPPE, MAGMA, TOUR_ARCHERS, CANON, iconPause, iconMenu, restartGame, backToMenu, returnMenu, nouvelleVague, trois, deux, un, victoire, perte, imagePrincesse, imageDragon;
     @FXML private BoxBlur blur;
-    @FXML private ImageView iconPause, iconMenu, restartGame, backToMenu, returnMenu, nouvelleVague, trois, deux, un, victoire, perte;
-    @FXML private ImageView imagePrincesse, imageDragon;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        partie = new Jeu(mapSelectionnee);
-        carte = new Carte(mapSelectionnee);
-        vueCarte = new VueCarte(panneauTuile, carte);
-        vueEnnemis = new VueEnnemis(paneEntitee);
-        spawner = new AppelVagues(partie);
-        vuePiege = new VuePiege();
-        vueProjectil = new VueProjectil();
-        fabriquePiege = new FabriqueInstance(partie);
+
+        initialiseModele();
+        initialiseVues();
+        initiliseTimeline();
+        initiliseInterface();
         //creationEnnemi = new FabriqueInstance(partie);
-        actionSpawn = new Timeline();
-        pauseInterVague = new Timeline();
-        blur = new BoxBlur();
+
         inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
-        gnd = new DragAndDrop(panneauTuile, fabriquePiege, paneEntitee, partie, this);
 
         gnd.configurerSourceDrag(BARRICADE_BOIS, TRAPPE, MAGMA, TOUR_ARCHERS, CANON);
         gnd.configurerCibleDrag();
@@ -171,6 +162,31 @@ public class Controleur implements Initializable {
 
         chrono.textProperty().bind(chronometre.asString());
     }
+
+    public void initialiseModele(){
+        partie = new Jeu(mapSelectionnee);
+        carte = new Carte(mapSelectionnee);
+        spawner = new AppelVagues(partie);
+        fabriquePiege = new FabriqueInstance(partie);
+    }
+
+    public void initialiseVues(){
+        vueCarte = new VueCarte(panneauTuile, carte);
+        vueEnnemis = new VueEnnemis(paneEntitee);
+        vuePiege = new VuePiege();
+        vueProjectil = new VueProjectil();
+    }
+
+    public void initiliseTimeline(){
+        actionSpawn = new Timeline();
+        pauseInterVague = new Timeline();
+    }
+
+    public void initiliseInterface(){
+        blur = new BoxBlur();
+        gnd = new DragAndDrop(panneauTuile, fabriquePiege, paneEntitee, partie, this);
+    }
+
 
     @FXML
     public void Dragon() {
@@ -469,7 +485,6 @@ public class Controleur implements Initializable {
                 if (pauseInterVague != null) {
                     pauseInterVague.stop();
                 }
-
                 declencherPauseInterVague(1, 2, 3, 3.5, 4);
             }
         }
