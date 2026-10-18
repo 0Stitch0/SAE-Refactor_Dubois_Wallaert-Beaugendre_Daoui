@@ -12,11 +12,7 @@ public class Entite {
     private BooleanProperty attaque;
     private IntegerProperty pdv;
     private String nom;
-    private Piege piegeCible;
     private int vie, degats, prime;
-    private int hautEntit = 32;
-    private int largEntit = 32;
-    private int temps = 0;
 
     //mettre pointdevie
     public Entite(double x, double y, Jeu partie, int vie, int degats, String nom, int prime) {
@@ -28,7 +24,6 @@ public class Entite {
         this.nom = nom;
         this.attaque = new SimpleBooleanProperty(false);
     }
-
 
     // l'ennemie perd des points de vie
     public void enleviePointDeVie(int degat){
@@ -82,7 +77,6 @@ public class Entite {
     public int getDegats(){
         return degats;
     }
-
 
 }
 
