@@ -12,8 +12,6 @@ public abstract class Ennemi extends EnMouvement{
     private Jeu partie;
     private Carte carte;
     private IntegerProperty vie;
-    private int deplX = -1; //va vers la droite sinon -1 pour aller vers la gauche
-    private int deplY = 0; //pour aller en haut ou en bas
     private boolean esquive;
     private int prime;
 
