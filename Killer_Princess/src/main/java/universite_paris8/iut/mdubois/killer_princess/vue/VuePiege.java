@@ -33,47 +33,63 @@ public class VuePiege {
         return imagesPieges.get(libelle);
     }
 
-    public void afficherPiegeSurMap(Piege p, String type, Pane pan, GestionnaireClic gestionnaireClic) {
-
-        //création de l'image du piège en fonction de son type et lui attribue la postion du piège
+    //créer l'image du piège en fonction de son type et lui attribue la postion du piège
+    public ImageView creerImagePiege(Piege p, String type) {
         ImageView imageSurMap = new ImageView(this.getImagePour(type));
         imageSurMap.setFitWidth(tailleTuile);
         imageSurMap.setFitHeight(tailleTuile);
         imageSurMap.setLayoutX(p.getX());
         imageSurMap.setLayoutY(p.getY());
-
-        //Ajout d'attributs à l'image et au piège pour les associer
         imageSurMap.getProperties().put("modele", p);
-        p.getProperties().put("node_image", imageSurMap);
+        p.getProperties().put("node_image", imageSurMap); //Ajout d'attributs à l'image et au piège pour les associer
+        return imageSurMap;
+    }
 
+    //créer une barre de vie
+    public ProgressBar creerBarreDeVie() {
+        //création de la barre de vie
+        ProgressBar barreDeVie = new ProgressBar();
+        barreDeVie.setPrefWidth(tailleTuile);    //sa longueur
+        barreDeVie.setPrefHeight(10);   //sa largeur
+        barreDeVie.setStyle("-fx-accent: #2ecc71;");    //sa couleur (verte)
+        return barreDeVie;
+
+    }
+
+    public void diminuerBarreDeVie(Piege p) {
+        Destructible piegeDestructible = (Destructible) p;
+        ProgressBar barreDeVie = new ProgressBar();
+        //La barre diminue correctement au contact de l'ennemi
+        barreDeVie.progressProperty().bind(
+                piegeDestructible.getPdvProperty().divide((double) piegeDestructible.getVie())
+        );
+    }
+
+    public void afficherBarreDeVie(Piege p) {
+        Destructible piegeDestructible = (Destructible) p;
+        ProgressBar barreDeVie = new ProgressBar();
+        //La barre s'affiche uniquement si les PV actuels sont inférieurs aux PV de base (contact avec l'ennemi)
+        barreDeVie.visibleProperty().bind(
+                piegeDestructible.getPdvProperty().lessThan((double) piegeDestructible.getVie())
+        );
+    }
+
+    public void afficherPiegeSurMap(Piege p, String type, Pane pan, GestionnaireClic gestionnaireClic) {
+        ImageView imageSurMap = creerImagePiege(p, type);    //création de l'image du piège
         gestionnaireClic.configurerClic(imageSurMap, (int) p.getY(), (int) p.getX(), type, p);
-
         //Création de la barre de vie seulement pour les pièges destructibles (avec pdv)
         if (p instanceof Destructible) {
             Destructible piegeDestructible = (Destructible) p;
+            ProgressBar barreDeVie = creerBarreDeVie();
 
-            //création de la barre de vie
-            ProgressBar barreDeVie = new ProgressBar();
-            barreDeVie.setPrefWidth(tailleTuile);    //sa longueur
-            barreDeVie.setPrefHeight(10);   //sa largeur
-            barreDeVie.setStyle("-fx-accent: #2ecc71;");    //sa couleur (verte)
-
-            //on la place sur la même colonne que le piège mais un peu au dessus (de 8px)
+            //on place la barre de vie sur la même colonne que le piège mais un peu au dessus (de 8px)
             barreDeVie.setLayoutX(p.getX() * tailleTuile);
             barreDeVie.setLayoutY((p.getY() * tailleTuile) - 8);
 
-            //La barre diminue correctement au contact de l'ennemi
-            barreDeVie.progressProperty().bind(
-                    piegeDestructible.getPdvProperty().divide((double) piegeDestructible.getVie())
-            );
+            diminuerBarreDeVie(p); // diminution de la barre de vie
+            afficherBarreDeVie(p); // affichage de la barre de vie
 
-            //La barre s'affiche uniquement si les PV actuels sont inférieurs aux PV de base (contact avec l'ennemi)
-            barreDeVie.visibleProperty().bind(
-                    piegeDestructible.getPdvProperty().lessThan((double) piegeDestructible.getVie())
-            );
-
-            //Stockage de la barre de vie dans le bagage du piège
-            p.getProperties().put("node_barre", barreDeVie);
+            p.getProperties().put("node_barre", barreDeVie); //Stockage de la barre de vie dans le bagage du piège
 
             //ajout de sa barre de vie au pan
             if (pan != null) {
@@ -81,7 +97,6 @@ public class VuePiege {
                 barreDeVie.toBack();
             }
         }
-
         //ajout de l'image du piège au pan
         if (pan != null) {
             pan.getChildren().add(imageSurMap);
