@@ -18,10 +18,6 @@ public abstract class EnMouvement extends Entite {
     public final ObservableMap<Object, Object> getProperties(){
         return this.properties;
     }
-    //bfs
-    private Bfs bfs;
-    private Case source;
-    private Case cible;
     private ArrayList<Case> chemin;
     private int positionActuelle;
     //bindings
@@ -41,11 +37,11 @@ public abstract class EnMouvement extends Entite {
         int colonne= (int)(x/partie.getCarte().getTailleTuile());
         int ligne= (int)(y/partie.getCarte().getTailleTuile());
 
-        source= partie.getCarte().getCaseAlgo(colonne, ligne);//source = point d'apparition
+        Case source= partie.getCarte().getCaseAlgo(colonne, ligne);//source = point d'apparition
         //faire un if avec squelette idRecherche different
-        cible = partie.getCarte().trouverTuile(100);//cible = case id 100
+        Case cible = partie.getCarte().trouverTuile(100);//cible = case id 100
 
-        bfs= new Bfs(partie.getCarte(), source);
+        Bfs bfs= new Bfs(partie.getCarte(), source);
         chemin= bfs.cheminVersSource(cible);
         if(chemin==null || chemin.isEmpty()){
             System.out.println("Chemin introuvable pour l'ennemi à " + x + ", " + y);
