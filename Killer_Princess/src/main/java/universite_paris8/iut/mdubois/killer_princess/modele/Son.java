@@ -12,10 +12,7 @@ public class Son {
     // Permet de changer le volume du son
     public static void volumeMusique(float nb){
         volumeMusique = nb;
-        if (clipMusique == null){
-            return;
-        }
-        else{
+        if (clipMusique != null){
             FloatControl gain = (FloatControl) clipMusique.getControl(FloatControl.Type.MASTER_GAIN);
             gain.setValue(nb);
         }
