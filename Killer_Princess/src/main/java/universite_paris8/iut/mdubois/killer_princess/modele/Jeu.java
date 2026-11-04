@@ -151,7 +151,7 @@ public class Jeu {
         Piege piege = getPiegeSelectionne();
 
         if (piege != null) {
-            int cout = piege.getCoutAmelioration();
+            int cout = piege.getCout();
             if (this.or.get() >= cout && piege.getNiveau() < piege.getNivMax()) {   //si l'or possédé est suffisant et que les piège n'a pas atteint son niveau max
                 depenserOr(cout);       //crédite le prix de l'amélioration
                 piege.amelioration();       //améliore le piège

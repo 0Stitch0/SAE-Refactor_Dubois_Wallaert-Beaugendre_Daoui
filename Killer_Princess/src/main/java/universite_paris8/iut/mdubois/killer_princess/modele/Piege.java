@@ -45,10 +45,6 @@ public abstract class Piege extends Entite {
         this.niveau = niveau;
     }
 
-    public int getCoutAmelioration(){
-        return this.cout;
-    }
-
     public int getNivMax(){
         return this.nivMax;
     }

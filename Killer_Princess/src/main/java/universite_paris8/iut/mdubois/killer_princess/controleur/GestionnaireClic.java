@@ -73,14 +73,14 @@ public class GestionnaireClic {
             texte = "Niveau Max !";
             couleur = "-fx-background-color: green;";
         }
-        else if (p.getCoutAmelioration() > this.partie.getOr().get()) {
+        else if (p.getCout() > this.partie.getOr().get()) {
             //Or insuffisant : bouton désactivé visuellement
             texte = "Plus d'or !";
             couleur = "-fx-background-color: darkgrey;";
         }
         else {
             //Amélioration possible : bouton actif avec le coût affiché
-            texte = "Update : " + p.getCoutAmelioration();
+            texte = "Update : " + p.getCout();
             couleur = "-fx-background-color: #2980b9;";
 
             btn.setOnAction(e -> {
