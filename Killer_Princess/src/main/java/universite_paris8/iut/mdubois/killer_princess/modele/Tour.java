@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public abstract class Tour extends Destructible {
     private int portee;
-    private int cooldown = 0;
+    private int cooldown;
     private Ennemi cibleActuelle = null;
 
-    public Tour(double x, double y, Jeu partie, int vie, int degat, String nom, int prime, int cout, int portee){
-        super( x, y, partie,  vie, degat, nom, prime, cout);
+    public Tour(double x, double y, Jeu partie, int vie, int degat, String nom, int prime, int cout, int portee, int cooldown){
+        super(x, y, partie,  vie, degat, nom, prime, cout);
         this.portee = portee;
+        this.cooldown = cooldown;
     }
 
     public void amelioration(){
@@ -33,8 +34,8 @@ public abstract class Tour extends Destructible {
         return true;
     }
 
-    public int intervalle() {
-        return 60;
+    public int getCooldown() {
+        return this.cooldown;
     }
 
     @Override
@@ -56,7 +57,7 @@ public abstract class Tour extends Destructible {
             if (distance <= rayonPixels) {
                 ennemi.enleverPdv(getDegats());
                 cibleActuelle = ennemi; // mémorise la cible pour l'animation
-                cooldown = intervalle();
+                cooldown = getCooldown();
                 return; // 1 seul ennemi à la fois
             }
         }
