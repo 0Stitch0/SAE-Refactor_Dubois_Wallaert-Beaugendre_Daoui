@@ -1,11 +1,6 @@
 package universite_paris8.iut.mdubois.killer_princess.modele;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
 import java.util.ArrayList;
-import static java.lang.reflect.Array.set;
 
 public abstract class Ennemi extends EnMouvement{
 
