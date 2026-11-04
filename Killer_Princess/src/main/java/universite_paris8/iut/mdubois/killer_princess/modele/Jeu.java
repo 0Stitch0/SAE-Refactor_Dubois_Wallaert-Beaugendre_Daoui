@@ -143,7 +143,7 @@ public class Jeu {
     public void affichage(){
         for(int i=0; i<listePieges.size(); i++){
             Piege p = listePieges.get(i);
-            System.out.println("cout : " + p.getCout() + " " + "niveau : " + p.getNiveau() + " " + "degat " + p.getDegat());
+            System.out.println("cout : " + p.getCout() + " " + "niveau : " + p.getNiveau() + " " + "degat " + p.getDegats());
         }
     }
 
