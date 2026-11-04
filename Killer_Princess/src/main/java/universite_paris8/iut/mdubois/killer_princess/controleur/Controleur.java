@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import universite_paris8.iut.mdubois.killer_princess.controleur.listeners.ListenerJeu;
 import universite_paris8.iut.mdubois.killer_princess.modele.*;
 import universite_paris8.iut.mdubois.killer_princess.vue.*;
 
@@ -42,6 +42,7 @@ public class Controleur implements Initializable {
     private boolean defaite = false;
     private boolean modeRapideDeclenche = false;
     private ArrayList<Ennemi> fileAttenteSpawn = new ArrayList<>();
+
     @FXML BorderPane root;
     @FXML private Pane paneEntitee, menuJeu;
     @FXML private StackPane inventaire, ecranFinPartie;
@@ -120,7 +121,7 @@ public class Controleur implements Initializable {
 
         chrono.textProperty().bind(chronometre.asString());
     }
-
+//truc que j'ai bouger
     public void initialiseModele(){
         partie = new Jeu(mapSelectionnee);
         carte = new Carte(mapSelectionnee);
@@ -145,59 +146,11 @@ public class Controleur implements Initializable {
         gnd = new DragAndDrop(panneauTuile, fabriquePiege, paneEntitee, partie, this);
     }
 
-
-
     public void initialiseListener(){
-        listenerPiege();
-        listenerEnnemies();
+        new ListenerJeu(partie, vuePiege, vueEnnemis, paneEntitee, gnd).activer();
     }
 
-    public void listenerPiege(){
-        partie.getListePieges().addListener((ListChangeListener<Piege>) change -> {
-            while (change.next()) {
-                //Un piège est ajouté via drag and drop
-                if (change.wasAdded()) {
-                    for (Piege nouveauPiege : change.getAddedSubList()) {
-                        vuePiege.afficherPiegeSurMap(nouveauPiege, nouveauPiege.getNom(), paneEntitee, gnd.getGestionnaireClic());
-                    }
-                }
-                //Un piège est vendu ou détruit pas ennemis
-                if (change.wasRemoved()) {
-                    for (Piege piegeSupprime : change.getRemoved()) {
-                        vuePiege.supprimerPiegeDeLaMap(piegeSupprime, paneEntitee);
-                    }
-                }
-            }
-        });
-    }
-
-    public void listenerEnnemies(){
-        partie.getListeEnnemis().addListener((ListChangeListener<Ennemi>) change -> {
-            while (change.next()) {
-                //Un ennemi apparait pendant les vagues
-                if (change.wasAdded()) {
-                    for (Ennemi nouvelEnnemi : change.getAddedSubList()) {
-                        vueEnnemis.creerVuePourEnnemi(nouvelEnnemi);
-                        // Change image si attaque ou run
-                        nouvelEnnemi.attaqueProperty().addListener((obs, oldVal, newVal) -> {
-                            if(newVal){
-                                vueEnnemis.imageEnnemieEnAttaque(nouvelEnnemi);
-                            }
-                            else{
-                                vueEnnemis.imageEnnemieEnRun(nouvelEnnemi);
-                            }
-                        });
-                    }
-                }
-                //Un ennemi meurt
-                if (change.wasRemoved()) {
-                    for (Ennemi ennemiMort : change.getRemoved()) {
-                        vueEnnemis.supprimerEnnemiDeLaMap(ennemiMort, paneEntitee);
-                    }
-                }
-            }
-        });
-    }
+//fin des truc bouger
 
     @FXML
     public void Dragon() {
