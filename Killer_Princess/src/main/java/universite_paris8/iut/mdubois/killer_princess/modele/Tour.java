@@ -33,8 +33,6 @@ public abstract class Tour extends Destructible {
         return true;
     }
 
-    public abstract int degatTir();
-
     public int intervalle() {
         return 60;
     }
@@ -56,7 +54,7 @@ public abstract class Tour extends Destructible {
             double distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance <= rayonPixels) {
-                ennemi.enleverPdv(degatTir());
+                ennemi.enleverPdv(getDegats());
                 cibleActuelle = ennemi; // mémorise la cible pour l'animation
                 cooldown = intervalle();
                 return; // 1 seul ennemi à la fois
