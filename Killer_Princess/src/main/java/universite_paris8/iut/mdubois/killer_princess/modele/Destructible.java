@@ -21,10 +21,6 @@ public abstract class Destructible extends Piege {
         return getPdv() > 0;
     }
 
-    public int getDegat() {
-        return super.getDegats();
-    }
-
     public IntegerProperty getPdvProperty() {
         return pdvProperty();
     }
