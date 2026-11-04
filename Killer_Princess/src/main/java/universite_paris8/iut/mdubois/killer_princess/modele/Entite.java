@@ -84,6 +84,10 @@ public class Entite {
     public int getDegats(){
         return degats;
     }
+
+    public void setDegats(int degats) {
+        this.degats = degats;
+    }
 }
 
 /*
