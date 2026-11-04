@@ -23,6 +23,7 @@ public class Entite {
         this.degats = degats;
         this.nom = nom;
         this.attaque = new SimpleBooleanProperty(false);
+        this.prime = prime;
     }
 
     // l'ennemie perd des points de vie

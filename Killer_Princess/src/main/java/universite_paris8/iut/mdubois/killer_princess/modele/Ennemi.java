@@ -35,7 +35,6 @@ public abstract class Ennemi extends EnMouvement{
         }else{
             System.out.println("valeur invalide");
         }
-
     }
 
     public boolean estMort(){
