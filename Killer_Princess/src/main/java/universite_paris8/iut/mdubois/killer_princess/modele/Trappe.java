@@ -14,7 +14,7 @@ public class Trappe extends Piege{
         double caseFaceY = this.getY();
         for(Ennemi ennemi : ennemiSurCase){
             if(Math.abs(ennemi.getX()-caseFaceX)<1 && Math.abs(ennemi.getY()-caseFaceY)<=0){
-                ennemi.enleverPdv(ennemi.getVie());
+                ennemi.enleverPdv(ennemi.getPdv());
             }
         }
     }

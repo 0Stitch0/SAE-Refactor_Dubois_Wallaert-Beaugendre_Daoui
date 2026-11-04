@@ -160,7 +160,7 @@ public abstract class EnMouvement extends Entite {
             return;
         }
         piege.pdvPerdus(getDegats());
-        enleviePointDeVie(piege.getDegat());
+        enleverPointDeVie(piege.getDegat());
         temps = 0;
 
         supprimerSiDetruit(piege);

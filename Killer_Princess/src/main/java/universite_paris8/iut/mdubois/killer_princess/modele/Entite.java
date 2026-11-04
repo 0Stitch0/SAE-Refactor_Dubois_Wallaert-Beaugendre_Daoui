@@ -20,6 +20,7 @@ public class Entite {
         yProp=new SimpleDoubleProperty(y);
         this.partie=partie;
         this.vie = vie;
+        this.pdv = new SimpleIntegerProperty(vie);
         this.degats = degats;
         this.nom = nom;
         this.attaque = new SimpleBooleanProperty(false);
@@ -27,8 +28,8 @@ public class Entite {
     }
 
     // l'ennemie perd des points de vie
-    public void enleviePointDeVie(int degat){
-        vie = vie - degat;
+    public void enleverPointDeVie(int degat){
+        pdv.set(pdv.get() - degat);
     }
 
     public BooleanProperty attaqueProperty() {
@@ -68,9 +69,14 @@ public class Entite {
     }
 
     public IntegerProperty pdvProperty() {
-        return this.pdv;
+        return pdv;
     }
 
+    public int getPdv() {
+        return pdv.get();
+    }
+
+    // maximum de la barre de vie
     public int getVie(){
         return vie;
     }
@@ -78,7 +84,6 @@ public class Entite {
     public int getDegats(){
         return degats;
     }
-
 }
 
 /*
