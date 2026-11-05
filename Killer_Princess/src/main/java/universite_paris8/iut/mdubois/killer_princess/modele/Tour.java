@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public abstract class Tour extends Destructible {
     private int portee;
-    private int cooldown = 0;
+    private int cooldown = 0; // un compteur de tic
     private Ennemi cibleActuelle = null;
-    private int intervalle;
+    private int intervalle; // l'intervalle entre chaque réinitialisation du compteur de tic
 
     public Tour(double x, double y, Jeu partie, int vie, int degat, String nom, int prime, int cout, int portee, int intervalle){
         super( x, y, partie,  vie, degat, nom, prime, cout);
@@ -48,7 +48,7 @@ public abstract class Tour extends Destructible {
             return;
         }
 
-        int rayonPixels = 3 * 32; // 3 cases en pixels
+        double rayonPixels = getPortee() * 32; // dépend par rapport a la portée de la tour
 
         for (Ennemi ennemi : ennemiSurCase) {
             double dx = ennemi.getX() - this.getX();
