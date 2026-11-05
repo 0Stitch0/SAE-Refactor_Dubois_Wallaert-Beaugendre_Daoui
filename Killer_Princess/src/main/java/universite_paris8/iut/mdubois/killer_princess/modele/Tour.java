@@ -4,14 +4,11 @@ import java.util.ArrayList;
 
 public abstract class Tour extends Destructible {
     private int portee;
-    private int cooldown = 0; // un compteur de tic
     private Ennemi cibleActuelle = null;
-    private int intervalle; // l'intervalle entre chaque réinitialisation du compteur de tic
 
     public Tour(double x, double y, Jeu partie, int vie, int degat, String nom, int prime, int cout, int portee, int intervalle){
-        super( x, y, partie,  vie, degat, nom, prime, cout);
+        super( x, y, partie,  vie, degat, nom, prime, cout, intervalle);
         this.portee = portee;
-        this.intervalle = intervalle;
     }
 
     public void amelioration(){
@@ -35,18 +32,13 @@ public abstract class Tour extends Destructible {
         return true;
     }
 
-    public int getIntervalle() {
-        return this.intervalle;
-    }
-
     @Override
     public void attaqueE(ArrayList<Ennemi> ennemiSurCase) {
         cibleActuelle = null;
+        super.attaqueE(ennemiSurCase);
+    }
 
-        if (cooldown > 0) {
-            cooldown--;
-            return;
-        }
+    protected boolean appliquerEffet(ArrayList<Ennemi> ennemiSurCase) {
 
         double rayonPixels = getPortee() * 32; // dépend par rapport a la portée de la tour
 
@@ -58,10 +50,9 @@ public abstract class Tour extends Destructible {
             if (distance <= rayonPixels) {
                 ennemi.enleverPdv(getDegats());
                 cibleActuelle = ennemi; // mémorise la cible pour l'animation
-                cooldown = this.getIntervalle();
-                return; // 1 seul ennemi à la fois
+                return true; // 1 seul ennemi à la fois
             }
         }
+        return false;
     }
-
 }

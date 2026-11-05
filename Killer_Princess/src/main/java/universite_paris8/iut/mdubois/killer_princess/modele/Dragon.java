@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Dragon extends Piege {
 
     public Dragon(Jeu partie){
-        super( 120, 220, partie, 10, 1000, "DRAGON", 0, 200);
+        super( 120, 220, partie, 10, 1000, "DRAGON", 0, 200, 60);
     }
 
     @Override
@@ -16,5 +16,10 @@ public class Dragon extends Piege {
 
     public boolean enPlace(){
         return true;
+    }
+
+    @Override
+    protected boolean appliquerEffet(ArrayList<Ennemi> ennemiSurCase) {
+        return false;
     }
 }

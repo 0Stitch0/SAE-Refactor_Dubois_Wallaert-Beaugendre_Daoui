@@ -5,8 +5,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Destructible extends Piege {
 
-    public Destructible(double x, double y, Jeu partie, int vie, int degat, String nom, int prime, int cout){
-        super(x, y, partie, vie, degat, nom, prime, cout);
+    public Destructible(double x, double y, Jeu partie, int vie, int degat, String nom, int prime, int cout, int intervalle){
+        super(x, y, partie, vie, degat, nom, prime, cout, intervalle);
     }
 
     public void pdvPerdus(int degats){
