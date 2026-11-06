@@ -14,10 +14,6 @@ public class Dragon extends Piege {
         e.enleverPdv(getDegats());
     }
 
-    public boolean enPlace(){
-        return true;
-    }
-
     @Override
     protected boolean appliquerEffet(ArrayList<Ennemi> ennemiSurCase) {
         return false;

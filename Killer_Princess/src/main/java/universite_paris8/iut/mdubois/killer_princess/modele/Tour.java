@@ -28,10 +28,6 @@ public abstract class Tour extends Destructible {
         return portee;
     }
 
-    public boolean enPlace(){
-        return true;
-    }
-
     @Override
     public void attaqueE(ArrayList<Ennemi> ennemiSurCase) {
         cibleActuelle = null;

@@ -21,8 +21,4 @@ public class Trappe extends Piege{
         }
         return aTue;
     }
-
-    public boolean enPlace(){
-        return true;
-    }
 }

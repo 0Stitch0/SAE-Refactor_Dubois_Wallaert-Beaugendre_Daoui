@@ -9,10 +9,6 @@ public class Magma extends Piege {
         super(x, y, partie, 20, 10, "MAGMA", 10, 20, 30);
     }
 
-    public boolean enPlace() {
-        return true;
-    }
-
     @Override
     protected boolean appliquerEffet(ArrayList<Ennemi> ennemiSurCase) {
         enregistrerEnnemisQuiMarchent(ennemiSurCase);
