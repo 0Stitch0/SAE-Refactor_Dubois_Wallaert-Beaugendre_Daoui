@@ -31,7 +31,7 @@ public class Style {
         imageMenu.setOnMouseEntered(e-> {
             imageMenu.setScaleX(1.15);
             imageMenu.setScaleY(1.15);
-            Son.bruitage(son);;
+            Son.getInstance().bruitage(son);;
 
         });
 

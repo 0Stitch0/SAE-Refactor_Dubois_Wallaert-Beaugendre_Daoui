@@ -42,17 +42,17 @@ public class ControleurMenu implements Initializable {
 
         // Régler le volume de la musique de fond
         sliderMusique.valueProperty().addListener((obs, oldVal, newVal) -> {
-            Son.volumeMusique(newVal.floatValue());
+            Son.getInstance().volumeMusique(newVal.floatValue());
         });
 
         // Régler le volume des bruitages
         sliderBruitage.valueProperty().addListener((obs, oldVal, newVal) -> {
-            Son.volumeBruitage(newVal.floatValue());
+            Son.getInstance().volumeBruitage(newVal.floatValue());
         });
 
         sliderMusique.setValue(-30);
         sliderBruitage.setValue(-25);
-        Son.musiqueDeFond(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/Musique/NoceEscape.wav"));
+        Son.getInstance().musiqueDeFond(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/Musique/NoceEscape.wav"));
 
         // Hover sur les cartes  + bruitage
         ImageView[] menuBouton = {start, survieMode, settings, quit, returnOption};
@@ -66,12 +66,12 @@ public class ControleurMenu implements Initializable {
         // Inversion bizarre de newVal et de oldVal
         switchSon.selectedProperty().addListener((obs,oldVal, newVal) -> {
             if(newVal){
-                Son.sonOn = true;
-                Son.musiqueDeFond(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/Musique/NoceEscape.wav"));
+                Son.getInstance().setSonOn(true);
+                Son.getInstance().musiqueDeFond(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/Musique/NoceEscape.wav"));
             }
             else{
-                Son.sonOn = false;
-                Son.couperSon();
+                Son.getInstance().setSonOn(false);
+                Son.getInstance().couperSon();
             }
         });
 
@@ -80,7 +80,7 @@ public class ControleurMenu implements Initializable {
     // Fonction Start
     @FXML
     public void startGame() {
-        Son.bruitageSelection();
+        Son.getInstance().bruitageSelection();
 
         //On masque le menu principal
         menu.setOpacity(0);
@@ -112,14 +112,14 @@ public class ControleurMenu implements Initializable {
 
         // toujours inversion bizarre switchSon
         if (switchSon.isSelected()) {
-            Son.musiqueDeFond(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/Musique/BrumeDeLoup.wav"));
+            Son.getInstance().musiqueDeFond(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/Musique/BrumeDeLoup.wav"));
         }
     }
 
     // Autre mode de jeu proposer : vague infini
     @FXML
     public void survieMode() throws IOException {
-        Son.bruitageSelection();
+        Son.getInstance().bruitageSelection();
         survie = true;
         FXMLLoader vueFx = new FXMLLoader(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/view.fxml"));
         Pane rootJeu = vueFx.load();
@@ -129,14 +129,14 @@ public class ControleurMenu implements Initializable {
 
         // toujours inversion bizarre switchSon
         if(switchSon.isSelected()){
-            Son.musiqueDeFond(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/Musique/BrumeDeLoup.wav"));
+            Son.getInstance().musiqueDeFond(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/Musique/BrumeDeLoup.wav"));
         }
     }
 
     // Parametres
     @FXML
     public void settings(){
-        Son.bruitageSelection();
+        Son.getInstance().bruitageSelection();
         menu.setMouseTransparent(true);
         settingsMenu.setOpacity(1);
         settingsMenu.setMouseTransparent(false);
@@ -152,7 +152,7 @@ public class ControleurMenu implements Initializable {
     // Arrêt du jeu
     @FXML
     public void quitJeu(){
-        Son.bruitageSelection();
+        Son.getInstance().bruitageSelection();
         Platform.exit();
     }
 
