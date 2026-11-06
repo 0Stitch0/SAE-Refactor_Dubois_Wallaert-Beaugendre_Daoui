@@ -34,7 +34,7 @@ public abstract class Piege extends Entite {
 
     public void amelioration(){
         this.setDegats(this.getDegats()+2);
-        this.setNiveau(this.getNiveau()+1);
+        this.niveau++;
     }
 
     public final ObservableMap<Object, Object> getProperties() {
@@ -65,9 +65,11 @@ public abstract class Piege extends Entite {
         return this.cout / 2;
     }
 
-    public abstract boolean enPlace();
+    public boolean enPlace() {
+        return true;
+    }
 
-    protected abstract boolean appliquerEffet(ArrayList<Ennemi> ennemiSurCase);
+    protected abstract boolean appliquerEffet(ArrayList<Ennemi> ennemiSurCase); //renvois true si l'effet a été appliqué et déclenche le cooldown
 
     /**
      * tous les pieges on une attaque qui se differencie
