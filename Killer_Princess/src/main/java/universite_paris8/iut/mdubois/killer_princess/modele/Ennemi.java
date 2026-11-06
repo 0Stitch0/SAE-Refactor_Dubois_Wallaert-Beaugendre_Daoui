@@ -4,13 +4,8 @@ import java.util.ArrayList;
 
 public abstract class Ennemi extends EnMouvement{
 
-    private Carte carte;
-    private boolean esquive;
-
     public Ennemi(double x, double y, Jeu partie, int vie, int degats, String nom, double vitesse, int prime) {
         super(x, y, partie, vie, degats, nom, vitesse, prime);
-        carte = partie.getCarte();
-        esquive = false;
     }
 
     public void mouvementAutoVersObjctif(){
@@ -29,6 +24,4 @@ public abstract class Ennemi extends EnMouvement{
     public boolean estMort(){
         return getPdv()<=0;
     }
-
-    public abstract void attaqueP(ArrayList<Ennemi> ennemiSurCase);
 }
