@@ -15,6 +15,9 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import universite_paris8.iut.mdubois.killer_princess.controleur.listeners.ListenerJeu;
+import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.ApparitionParGroupe;
+import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.ApparitionUnParUn;
+import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.StrategieApparition;
 import universite_paris8.iut.mdubois.killer_princess.modele.*;
 import universite_paris8.iut.mdubois.killer_princess.vue.*;
 
@@ -35,6 +38,7 @@ public class Controleur implements Initializable {
     private FabriqueInstance fabriqueInstance, fabriquePiege;
     private Jeu partie;
     private AppelVagues spawner;
+    private StrategieApparition strategieApparition;
     private Timeline chronoVagues,  actionSpawn,  pauseInterVague;
     private DragAndDrop gnd;
     private int temps, numeroMapActuelle = 1;
@@ -82,6 +86,15 @@ public class Controleur implements Initializable {
         spawner = new AppelVagues(partie);
         fabriquePiege = new FabriqueInstance(partie);
         fabriqueInstance = fabriquePiege;
+        strategieApparition = choisirStrategieApparition();
+    }
+
+    // Choix de la façon dont les ennemis apparaissent selon la map (fait une seule fois)
+    private StrategieApparition choisirStrategieApparition() {
+        if (mapSelectionnee == 1) {
+            return new ApparitionParGroupe(partie, spawner);
+        }
+        return new ApparitionUnParUn(partie, spawner);
     }
 
     public void initialiseVues(){
@@ -112,8 +125,7 @@ public class Controleur implements Initializable {
 
     private void lancerVagues() {
         // mode normal avec des vagues
-        if(!ControleurMenu.survie){
-            this.spawner = new AppelVagues(partie);
+        if (!ControleurMenu.survie){
             if(partie.getGestionnaireVagues().getVagueActuelle().getNum()<partie.getGestionnaireVagues().getNbTotalVagues()) {
                 SpawnVagues();
             }
@@ -240,34 +252,43 @@ public class Controleur implements Initializable {
                 /// on définit le FPS (nbre de frame par seconde)
                 Duration.seconds(0.017),
                 /// c'est un eventHandler d'ou le lambda on définit ce qui se passe à chaque frame
-                (ev -> {///pas de if pour mouvement lisse pas sacadé
-                    if (this.isPaused) {
-                        return;
-                    }
-                    if (!partie.estPartiePerdue() && !partie.estPartieGagnee()) {
-                        partie.mettreAJour();
-                        temps++;
-                        mettreAJourProjectils();
-
-                        if(!ControleurMenu.survie) {
-                            skipTimerVagues();
-                        }
-                    } else {
-                        ecranFinPartie.setOpacity(1.0);
-                        ecranFinPartie.setMouseTransparent(false);
-
-                        if (partie.estPartiePerdue()) {
-                            perte.setOpacity(1);
-                            affichageFinPartie(perte);
-                        } else {
-                            victoire.setOpacity(1);
-                            affichageFinPartie(victoire);
-                        }
-                        finPartie();
-                    }
-                })
+                (ev -> mettreAJourFrame())
         );
         gameLoop.getKeyFrames().add(kf);
+    }
+
+    // Ce qui se passe à chaque frame
+    private void mettreAJourFrame() {
+        ///pas de if pour mouvement lisse pas sacadé
+        if (this.isPaused) {
+            return;
+        }
+        if (!partie.estPartiePerdue() && !partie.estPartieGagnee()) {
+            partie.mettreAJour();
+            temps++;
+            mettreAJourProjectils();
+
+            if(!ControleurMenu.survie) {
+                skipTimerVagues();
+            }
+        } else {
+            terminerPartie();
+        }
+    }
+
+    // Affiche l'écran de fin (victoire ou défaite) et arrête le jeu
+    private void terminerPartie() {
+        ecranFinPartie.setOpacity(1.0);
+        ecranFinPartie.setMouseTransparent(false);
+
+        if (partie.estPartiePerdue()) {
+            perte.setOpacity(1);
+            affichageFinPartie(perte);
+        } else {
+            victoire.setOpacity(1);
+            affichageFinPartie(victoire);
+        }
+        finPartie();
     }
 
     public void affichageFinPartie(ImageView i) {
@@ -357,18 +378,9 @@ public class Controleur implements Initializable {
         if (chronoVagues == null || chronoVagues.getStatus() != Timeline.Status.RUNNING) {
             System.out.println("La vague commence !");
 
-            Duration cadence;
-            int cycles;
-
-            if (ControleurMenu.mapSelectionnee == 1) {
-                //Map 1 : spawn par GROUPES toutes les 3 secondes
-                cadence = Duration.seconds(3);
-                cycles = partie.getGestionnaireVagues().getVagueActuelle().getNombreDeGroupes(); //nombre de groupes dans la vague actuelle
-            } else {
-                //Map 2 : spawn ennemi par ennemi toutes les secondes
-                cadence = Duration.seconds(1);
-                cycles = Timeline.INDEFINITE;       //INDEFINITE car c'est la fileAttenteSpawn qui gère l'arrêt
-            }
+            //La cadence et le nombre de cycles viennent de la stratégie (selon la map)
+            Duration cadence = strategieApparition.getCadence();
+            int cycles = strategieApparition.getNombreCycles();
 
             //À chaque tic de la cadence, on appelle gererApparitionEnnemi
             KeyFrame actionSpawn = new KeyFrame(cadence, event -> gererApparitionEnnemi());
@@ -381,36 +393,8 @@ public class Controleur implements Initializable {
     }
 
     private void gererApparitionEnnemi() {
-        boolean vagueTermineeEtFileVide;
-
-        if (ControleurMenu.mapSelectionnee == 1) {      //MAP 1 : Spawn du groupe entier d'un coup
-            this.spawner.spawnUnGroupe();
-            vagueTermineeEtFileVide = partie.getGestionnaireVagues().vagueTerminee();
-        }
-        else {                  //MAP 2 : Spawn un ennemi à la fois
-            //Si la file contient déjà des ennemis, on en sort un seul pour ce tic
-            if (!fileAttenteSpawn.isEmpty()) {
-                partie.ajouterEnnemi(fileAttenteSpawn.remove(0));
-            }
-            //Si la file est vide mais qu'il reste des groupes, on la remplit
-            else if (!partie.getGestionnaireVagues().vagueTerminee()) {
-                int ennemisAvant = partie.getListeEnnemis().size();
-                this.spawner.spawnUnGroupe();
-
-                //On transfère le groupe de la liste du jeu vers notre file d'attente
-                while (partie.getListeEnnemis().size() > ennemisAvant) {
-                    Ennemi ennemi = partie.getListeEnnemis().remove(partie.getListeEnnemis().size() - 1);
-                    fileAttenteSpawn.add(0, ennemi);
-                }
-
-                //On fait spawn le tout premier de la file immédiatement pour ne pas sauter ce tick
-                if (!fileAttenteSpawn.isEmpty()) {
-                    partie.ajouterEnnemi(fileAttenteSpawn.remove(0));
-                }
-            }
-            //On met à jour l'état de fin de vague pour la Map 2 (vague terminée ET file d'attente vide)
-            vagueTermineeEtFileVide = partie.getGestionnaireVagues().vagueTerminee() && fileAttenteSpawn.isEmpty();
-        }
+        //Le spawn dépend de la map, c'est la stratégie qui s'en occupe
+        boolean vagueTermineeEtFileVide = strategieApparition.faireApparaitre();
 
         //Gestion unique de fin de vague pour les 2 maps (Pour les deux maps)
         if (vagueTermineeEtFileVide) {
