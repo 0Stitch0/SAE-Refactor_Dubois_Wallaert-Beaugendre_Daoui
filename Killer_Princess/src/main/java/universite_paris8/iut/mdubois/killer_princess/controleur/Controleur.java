@@ -69,7 +69,7 @@ public class Controleur implements Initializable {
 
         configurerDragAndDrop();
         modeJeu.demarrer();
-        changerImagesMap2();
+        changerImagesCarte2();
         appliquerHovers();
         configurerAffichage();
 
@@ -128,7 +128,7 @@ public class Controleur implements Initializable {
     }
 
     //changement des images du chateau pour la map2
-    private void changerImagesMap2() {
+    private void changerImagesCarte2() {
         if(mapSelectionnee == 2){
             imagePrincesse.setTranslateX(400);
             imagePrincesse.setTranslateY(-45);
@@ -153,7 +153,6 @@ public class Controleur implements Initializable {
             Style.styleMenuBouton(bouton);
         }
     }
-
 
     private void configurerAffichage(){
         inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
