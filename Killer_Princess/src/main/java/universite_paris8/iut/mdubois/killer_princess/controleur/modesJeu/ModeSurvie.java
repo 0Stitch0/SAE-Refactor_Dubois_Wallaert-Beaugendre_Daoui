@@ -1,16 +1,16 @@
 package universite_paris8.iut.mdubois.killer_princess.controleur.modesJeu;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 import universite_paris8.iut.mdubois.killer_princess.controleur.*;
+import universite_paris8.iut.mdubois.killer_princess.controleur.chrono.ChronoSpawn;
 import universite_paris8.iut.mdubois.killer_princess.modele.*;
 import universite_paris8.iut.mdubois.killer_princess.vue.*;
 
 public class ModeSurvie implements ModeJeu {
     private final Jeu partie;
     private final FabriqueInstance fabriqueInstance;
-    private Timeline chronoVagues;
+    private final ChronoSpawn chronoVagues = new ChronoSpawn();
 
     public ModeSurvie(Jeu partie, FabriqueInstance fabriqueInstance) {
         this.partie = partie;
@@ -21,7 +21,7 @@ public class ModeSurvie implements ModeJeu {
     @Override
     public void demarrer() {
         System.out.println("La vague infini commence");
-        chronoVagues = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
+        chronoVagues.lancer(Duration.seconds(2), Timeline.INDEFINITE, () -> {
             int aleatoireEnnemi;
             int aleatoirePositionY;
             aleatoireEnnemi = (int) (Math.random() * 100) + 1;
@@ -30,9 +30,7 @@ public class ModeSurvie implements ModeJeu {
             // 31 est mieux que 32 car ennemie a moitié sur la map
             Ennemi ennemi = fabriqueInstance.creerInstanceEnnemi(ennemiNom, 29 * 31, aleatoirePositionY * 31);
             partie.ajouterEnnemi(ennemi);
-        }));
-        chronoVagues.setCycleCount(Timeline.INDEFINITE);
-        chronoVagues.play();
+        });
     }
 
     @Override
@@ -42,22 +40,16 @@ public class ModeSurvie implements ModeJeu {
 
     @Override
     public void arreter() {
-        if(chronoVagues != null){
-            chronoVagues.stop();
-        }
+        chronoVagues.arreter();
     }
 
     @Override
     public void pause() {
-        if(chronoVagues != null){
-            chronoVagues.pause();
-        }
+        chronoVagues.pause();
     }
 
     @Override
     public void reprendre() {
-        if(chronoVagues != null && chronoVagues.getStatus() == Timeline.Status.PAUSED) {
-            chronoVagues.play();
-        }
+        chronoVagues.reprendre();
     }
 }
