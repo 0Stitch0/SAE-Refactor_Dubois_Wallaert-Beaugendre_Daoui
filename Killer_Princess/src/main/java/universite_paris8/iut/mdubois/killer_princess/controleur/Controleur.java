@@ -239,9 +239,9 @@ public class Controleur implements Initializable {
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame kf = new KeyFrame(
-                /// on définit le FPS (nbre de frame par seconde)
+                // on définit le FPS (nbre de frame par seconde)
                 Duration.seconds(0.017),
-                /// c'est un eventHandler d'ou le lambda on définit ce qui se passe à chaque frame
+                // c'est un eventHandler d'ou le lambda on définit ce qui se passe à chaque frame
                 (ev -> mettreAJourFrame())
         );
         gameLoop.getKeyFrames().add(kf);
@@ -249,7 +249,7 @@ public class Controleur implements Initializable {
 
     // Ce qui se passe à chaque frame
     private void mettreAJourFrame() {
-        ///pas de if pour mouvement lisse pas sacadé
+        //pas de if pour mouvement lisse pas sacadé
         if (this.isPaused) {
             return;
         }
