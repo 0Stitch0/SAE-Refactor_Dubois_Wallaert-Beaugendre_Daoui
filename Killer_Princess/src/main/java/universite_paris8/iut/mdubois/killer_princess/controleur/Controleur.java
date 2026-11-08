@@ -66,6 +66,8 @@ public class Controleur implements Initializable {
         configurerDragAndDrop();
         lancerVagues();
         changerImagesMap2();
+        appliquerHovers();
+        configurerAffichage();
 
         inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
 
@@ -81,17 +83,6 @@ public class Controleur implements Initializable {
         waveDisplay.textProperty().bind(
                 partie.getVague().asString("Vague : %d /4")
         );
-
-        // Hover sur les cartes
-        VBox[] cartePiege = {cartePiege1, cartePiege2, cartePiege3, cartePiege4, cartePiege5, cartePiege6};
-        for (VBox carte : cartePiege)
-            Style.styleCarteHover(carte);
-
-        // Hover menu Bouton
-        ImageView[] menuBouton = {iconMenu, iconPause, backToMenu, restartGame, returnMenu};
-        for (ImageView bouton : menuBouton){
-            Style.styleMenuBouton(bouton);
-        }
 
         initAnimation();
         gameLoop.play();
@@ -135,7 +126,7 @@ public class Controleur implements Initializable {
 
     private void lancerVagues() {
         // mode normal avec des vagues
-        if (!ControleurMenu.survie){
+        if(!ControleurMenu.survie){
             this.spawner = new AppelVagues(partie);
             if(partie.getGestionnaireVagues().getVagueActuelle().getNum()<partie.getGestionnaireVagues().getNbTotalVagues()) {
                 SpawnVagues();
@@ -149,7 +140,7 @@ public class Controleur implements Initializable {
 
     //changement des images du chateau pour la map2
     private void changerImagesMap2() {
-        if (mapSelectionnee == 2) {
+        if(mapSelectionnee == 2){
             imagePrincesse.setTranslateX(400);
             imagePrincesse.setTranslateY(-45);
             imagePrincesse.setFitWidth(66.66);
@@ -160,6 +151,35 @@ public class Controleur implements Initializable {
             imageDragon.setFitHeight(66);
         }
     }
+
+    private void appliquerHovers(){
+        // Hover sur les cartes
+        VBox[] cartePiege = {cartePiege1, cartePiege2, cartePiege3, cartePiege4, cartePiege5, cartePiege6};
+        for(VBox carte : cartePiege) {
+            Style.styleCarteHover(carte);
+        }
+        // Hover menu Bouton
+        ImageView[] menuBouton = {iconMenu, iconPause, backToMenu, restartGame, returnMenu};
+        for(ImageView bouton : menuBouton){
+            Style.styleMenuBouton(bouton);
+        }
+    }
+
+
+    private void configurerAffichage(){
+        inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
+
+        panneauTuile.setPickOnBounds(true);
+        panneauTuile.setMinSize(960, 740); // 30 colonnes x 21 lignes en 32px
+
+        if(paneEntitee != null){
+            paneEntitee.setPickOnBounds(false);
+        }
+        goldDisplay.textProperty().bind( partie.getOr().asString("Or : %d") );
+        waveDisplay.textProperty().bind( partie.getVague().asString("Vague : %d /4") );
+    }
+
+
 
 //fin des truc bouger
 
