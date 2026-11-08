@@ -87,7 +87,7 @@ public class Controleur implements Initializable {
         fabriquePiege = new FabriqueInstance(partie);
         fabriqueInstance = fabriquePiege;
         strategieApparition = choisirStrategieApparition();
-        modeDeJeu = choisirModeDeJeu();
+        modeJeu = choisirModeDeJeu();
     }
 
     // Choix de la façon dont les ennemis apparaissent selon la map (fait une seule fois)
