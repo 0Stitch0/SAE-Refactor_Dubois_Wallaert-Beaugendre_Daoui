@@ -69,21 +69,6 @@ public class Controleur implements Initializable {
         appliquerHovers();
         configurerAffichage();
 
-        inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
-
-        panneauTuile.setPickOnBounds(true);
-        panneauTuile.setMinSize(960, 740); // 30 colonnes x 21 lignes en 32px
-
-        if (paneEntitee != null) {
-            paneEntitee.setPickOnBounds(false);
-        }
-        goldDisplay.textProperty().bind(
-                partie.getOr().asString("Or : %d")
-        );
-        waveDisplay.textProperty().bind(
-                partie.getVague().asString("Vague : %d /4")
-        );
-
         initAnimation();
         gameLoop.play();
 
