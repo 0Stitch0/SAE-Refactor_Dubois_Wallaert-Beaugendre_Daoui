@@ -127,6 +127,7 @@ public class Controleur implements Initializable {
         carte = new Carte(mapSelectionnee);
         spawner = new AppelVagues(partie);
         fabriquePiege = new FabriqueInstance(partie);
+        fabriqueInstance = fabriquePiege;
     }
 
     public void initialiseVues(){
