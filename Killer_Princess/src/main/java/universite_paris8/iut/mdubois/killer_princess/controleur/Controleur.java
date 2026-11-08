@@ -65,6 +65,7 @@ public class Controleur implements Initializable {
 
         configurerDragAndDrop();
         lancerVagues();
+        changerImagesMap2();
 
         inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
 
@@ -80,20 +81,6 @@ public class Controleur implements Initializable {
         waveDisplay.textProperty().bind(
                 partie.getVague().asString("Vague : %d /4")
         );
-
-
-
-        //changement des images du chateau pour la map2
-        if (mapSelectionnee == 2) {
-            imagePrincesse.setTranslateX(400);
-            imagePrincesse.setTranslateY(-45);
-            imagePrincesse.setFitWidth(66.66);
-            imagePrincesse.setFitHeight(110);
-            imageDragon.setTranslateX(-50);
-            imageDragon.setTranslateY(-25);
-            imageDragon.setFitWidth(48);
-            imageDragon.setFitHeight(66);
-        }
 
         // Hover sur les cartes
         VBox[] cartePiege = {cartePiege1, cartePiege2, cartePiege3, cartePiege4, cartePiege5, cartePiege6};
@@ -160,7 +147,19 @@ public class Controleur implements Initializable {
         }
     }
 
-
+    //changement des images du chateau pour la map2
+    private void changerImagesMap2() {
+        if (mapSelectionnee == 2) {
+            imagePrincesse.setTranslateX(400);
+            imagePrincesse.setTranslateY(-45);
+            imagePrincesse.setFitWidth(66.66);
+            imagePrincesse.setFitHeight(110);
+            imageDragon.setTranslateX(-50);
+            imageDragon.setTranslateY(-25);
+            imageDragon.setFitWidth(48);
+            imageDragon.setFitHeight(66);
+        }
+    }
 
 //fin des truc bouger
 
