@@ -205,17 +205,12 @@ public class Controleur implements Initializable {
         inventaire.setMouseTransparent(afficher);
     }
 
-
     @FXML
     public void backToMenu() throws Exception{
         Son.bruitageSelection();
-        FXMLLoader vueFx = new FXMLLoader(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/viewMenu.fxml"));
-        Pane rootJeu = vueFx.load();
-        Stage stage = (Stage) root.getScene().getWindow();
-        stage.setScene(new Scene(rootJeu));
-        stage.show();
+        chargerScene("viewMenu.fxml");
 
-        //toujours inversion bizarre switchSon
+//        toujours inversion bizarre switchSon
 //        if(Menu.switchSon.isSelected()){
 //            Son.musiqueDeFond(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/Musique/NoceEscape.wav"));
 //        }
@@ -224,14 +219,17 @@ public class Controleur implements Initializable {
     @FXML
     public void restartGame() throws Exception{
         Son.bruitageSelection();
-        FXMLLoader vueFx = new FXMLLoader(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/view.fxml"));
+        chargerScene("view.fxml");
+    }
+
+    // Charge la scène dont on donne le nom du fichier fxml
+    private void chargerScene(String fichier) throws Exception {
+        FXMLLoader vueFx = new FXMLLoader(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/" + fichier));
         Pane rootJeu = vueFx.load();
         Stage stage = (Stage) root.getScene().getWindow();
         stage.setScene(new Scene(rootJeu));
         stage.show();
     }
-
-
 
     private void initAnimation() {
         gameLoop= new Timeline();
