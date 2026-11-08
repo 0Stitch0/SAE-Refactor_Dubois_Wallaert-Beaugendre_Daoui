@@ -74,7 +74,8 @@ public class Controleur implements Initializable {
 
         chrono.textProperty().bind(chronometre.asString());
     }
-//truc que j'ai bouger
+
+
     public void initialiseModele(){
         partie = new Jeu(mapSelectionnee);
         carte = new Carte(mapSelectionnee);
@@ -165,9 +166,6 @@ public class Controleur implements Initializable {
     }
 
 
-
-//fin des truc bouger
-
     @FXML
     public void Dragon() {
         if (!isPaused) {
@@ -179,17 +177,32 @@ public class Controleur implements Initializable {
     @FXML
     public void menuJeu(){
         Son.bruitageSelection();
-        blur.setIterations(1);
-        panneauTuile.setEffect(blur);
-        paneEntitee.setEffect(blur);
-        inventaire.setEffect(blur);
-        top.setEffect(blur);
-        menuJeu.setOpacity(1);
-        menuJeu.setMouseTransparent(false);
-        top.setMouseTransparent(true);
-        inventaire.setMouseTransparent(true);
+        afficherMenuPause(true);
         if(!isPaused)
             switchPause();
+    }
+
+    @FXML
+    public void returnToGame(){
+        Son.bruitageSelection();
+        afficherMenuPause(false);
+        switchPause();
+    }
+
+    private void afficherMenuPause(boolean afficher) {
+        if (afficher) {
+            blur.setIterations(1);
+            panneauTuile.setEffect(blur);
+            paneEntitee.setEffect(blur);
+            inventaire.setEffect(blur);
+            top.setEffect(blur);
+        } else {
+            blur.setIterations(0);
+        }
+        menuJeu.setOpacity(afficher ? 1 : 0);
+        menuJeu.setMouseTransparent(!afficher);
+        top.setMouseTransparent(afficher);
+        inventaire.setMouseTransparent(afficher);
     }
 
 
@@ -218,16 +231,7 @@ public class Controleur implements Initializable {
         stage.show();
     }
 
-    @FXML
-    public void returnToGame(){
-        Son.bruitageSelection();
-        blur.setIterations(0);
-        menuJeu.setOpacity(0);
-        menuJeu.setMouseTransparent(true);
-        top.setMouseTransparent(false);
-        inventaire.setMouseTransparent(false);
-        switchPause();
-    }
+
 
     private void initAnimation() {
         gameLoop= new Timeline();
