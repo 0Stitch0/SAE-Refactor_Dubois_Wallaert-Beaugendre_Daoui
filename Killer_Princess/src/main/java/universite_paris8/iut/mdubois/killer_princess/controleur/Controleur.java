@@ -15,6 +15,9 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import universite_paris8.iut.mdubois.killer_princess.controleur.listeners.ListenerJeu;
+import universite_paris8.iut.mdubois.killer_princess.controleur.modesJeu.ModeJeu;
+import universite_paris8.iut.mdubois.killer_princess.controleur.modesJeu.ModeSurvie;
+import universite_paris8.iut.mdubois.killer_princess.controleur.modesJeu.ModeVagues;
 import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.ApparitionParGroupe;
 import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.ApparitionUnParUn;
 import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.StrategieApparition;
@@ -39,12 +42,10 @@ public class Controleur implements Initializable {
     private Jeu partie;
     private AppelVagues spawner;
     private StrategieApparition strategieApparition;
-    private Timeline chronoVagues,  actionSpawn,  pauseInterVague;
+    private ModeJeu modeJeu;
     private DragAndDrop gnd;
     private int temps, numeroMapActuelle = 1;
     private boolean isPaused = false;
-    private boolean defaite = false;
-    private boolean modeRapideDeclenche = false;
     private ArrayList<Ennemi> fileAttenteSpawn = new ArrayList<>();
 
     @FXML BorderPane root;
@@ -62,13 +63,12 @@ public class Controleur implements Initializable {
 
         initialiseModele();
         initialiseVues();
-        initiliseTimeline();
         initiliseInterface();
         initialiseListener();
         //creationEnnemi = new FabriqueInstance(partie);
 
         configurerDragAndDrop();
-        lancerVagues();
+        modeJeu.demarrer();
         changerImagesMap2();
         appliquerHovers();
         configurerAffichage();
@@ -87,6 +87,7 @@ public class Controleur implements Initializable {
         fabriquePiege = new FabriqueInstance(partie);
         fabriqueInstance = fabriquePiege;
         strategieApparition = choisirStrategieApparition();
+        modeDeJeu = choisirModeDeJeu();
     }
 
     // Choix de la façon dont les ennemis apparaissent selon la map (fait une seule fois)
@@ -97,16 +98,19 @@ public class Controleur implements Initializable {
         return new ApparitionUnParUn(partie, spawner);
     }
 
+    // Choix du mode de jeu (survie ou vagues), fait une seule fois
+    private ModeJeu choisirModeDeJeu() {
+        if (ControleurMenu.survie) {
+            return new ModeSurvie(partie, fabriqueInstance);
+        }
+        return new ModeVagues(partie, strategieApparition, nouvelleVague, trois, deux, un);
+    }
+
     public void initialiseVues(){
         vueCarte = new VueCarte(panneauTuile, carte);
         vueEnnemis = new VueEnnemis(paneEntitee);
         vuePiege = new VuePiege();
         vueProjectil = new VueProjectil();
-    }
-
-    public void initiliseTimeline(){
-        actionSpawn = new Timeline();
-        pauseInterVague = new Timeline();
     }
 
     public void initiliseInterface(){
@@ -121,19 +125,6 @@ public class Controleur implements Initializable {
     private void configurerDragAndDrop() {
         gnd.configurerSourceDrag(BARRICADE_BOIS, TRAPPE, MAGMA, TOUR_ARCHERS, CANON);
         gnd.configurerCibleDrag();
-    }
-
-    private void lancerVagues() {
-        // mode normal avec des vagues
-        if (!ControleurMenu.survie){
-            if(partie.getGestionnaireVagues().getVagueActuelle().getNum()<partie.getGestionnaireVagues().getNbTotalVagues()) {
-                SpawnVagues();
-            }
-        }
-        // survie mode
-        else{
-            vagueInfini();
-        }
     }
 
     //changement des images du chateau pour la map2
@@ -268,9 +259,7 @@ public class Controleur implements Initializable {
             temps++;
             mettreAJourProjectils();
 
-            if(!ControleurMenu.survie) {
-                skipTimerVagues();
-            }
+            modeJeu.mettreAJour();
         } else {
             terminerPartie();
         }
@@ -323,136 +312,21 @@ public class Controleur implements Initializable {
     }
     public void finPartie() {
         gameLoop.stop();
-        chronoVagues.stop();
-        actionSpawn.stop();
-        pauseInterVague.stop();
+        modeJeu.arreter();
     }
 
     public void switchPause(){
         this.isPaused = !this.isPaused;
         if(this.isPaused){
             gameLoop.pause();
-            if (chronoVagues != null) chronoVagues.pause();
-            if (actionSpawn != null) actionSpawn.pause();
-            if (pauseInterVague != null) pauseInterVague.pause();
-        } else {                //sinon (booléen faux) on remet en marche toutes les TimeLine initialisée dans le Controleur
+            modeJeu.pause();
+        } else {                //sinon (booléen faux) on remet en marche la boucle et le mode de jeu
             gameLoop.play();
-            if (chronoVagues != null && chronoVagues.getStatus() == Timeline.Status.PAUSED) {
-                chronoVagues.play();
-            }
-            if (actionSpawn != null && actionSpawn.getStatus() == Timeline.Status.PAUSED) {
-                actionSpawn.play();
-            }
-            if (pauseInterVague != null && pauseInterVague.getStatus() == Timeline.Status.PAUSED) {
-                pauseInterVague.play();
-            }
+            modeJeu.reprendre();
         }
     }
-
 
     public boolean isPaused(){
         return this.isPaused;
-    }
-
-    // Mode survie Vague infini
-    public void vagueInfini(){
-        System.out.println("La vague infini commence");
-        chronoVagues = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
-            if(!defaite){
-                int aleatoireEnnemi;
-                int aleatoirePositionY;
-                aleatoireEnnemi = (int) (Math.random() * 100) + 1;
-                aleatoirePositionY = (int) (Math.random() * 19) + 1;
-                String ennemiNom = fabriqueInstance.retournerStringEnnemi(aleatoireEnnemi);
-                // 31 est mieux que 32 car ennemie a moitié sur la map
-                Ennemi ennemi = fabriqueInstance.creerInstanceEnnemi(ennemiNom, 29 * 31, aleatoirePositionY * 31);
-                partie.ajouterEnnemi(ennemi);
-            }
-        }));
-        chronoVagues.setCycleCount(Timeline.INDEFINITE);
-        chronoVagues.play();
-    }
-
-    //Lance le chronomètre de spawn de la vague actuelle
-    public void SpawnVagues() {
-        if (chronoVagues == null || chronoVagues.getStatus() != Timeline.Status.RUNNING) {
-            System.out.println("La vague commence !");
-
-            //La cadence et le nombre de cycles viennent de la stratégie (selon la map)
-            Duration cadence = strategieApparition.getCadence();
-            int cycles = strategieApparition.getNombreCycles();
-
-            //À chaque tic de la cadence, on appelle gererApparitionEnnemi
-            KeyFrame actionSpawn = new KeyFrame(cadence, event -> gererApparitionEnnemi());
-
-            //Initialisation de chronovagues
-            chronoVagues = new Timeline(actionSpawn);
-            chronoVagues.setCycleCount(cycles);
-            chronoVagues.play();
-        }
-    }
-
-    private void gererApparitionEnnemi() {
-        //Le spawn dépend de la map, c'est la stratégie qui s'en occupe
-        boolean vagueTermineeEtFileVide = strategieApparition.faireApparaitre();
-
-        //Gestion unique de fin de vague pour les 2 maps (Pour les deux maps)
-        if (vagueTermineeEtFileVide) {
-            if (chronoVagues != null) {
-                chronoVagues.stop();
-            }
-
-            //S'il reste des vagues et qu'il y a des ennemis en vie -> Pause de 30s
-            if (partie.getVague().get() < partie.getGestionnaireVagues().getNbTotalVagues() && !partie.getListeEnnemis().isEmpty()) {
-                if (pauseInterVague != null) pauseInterVague.stop(); // évite les conflits
-                declencherPauseInterVague(26, 27, 28, 29, 30);
-            }
-        }
-    }
-    private void declencherPauseInterVague(double message, double three, double two, double one, double vague) {
-        if (partie.getGestionnaireVagues().vagueTerminee() && partie.getVague().get() < partie.getGestionnaireVagues().getNbTotalVagues()) {
-            //Timers pour l'affichage du décompte juste avant la vague
-            this.pauseInterVague = new Timeline(
-                    new KeyFrame(Duration.seconds(message), event -> {
-                        nouvelleVague.setOpacity(1);
-                    }),
-                    new KeyFrame(Duration.seconds(three), event -> {
-                        nouvelleVague.setOpacity(0);
-                        trois.setOpacity(1);
-                    }),
-                    new KeyFrame(Duration.seconds(two), event -> {
-                        trois.setOpacity(0);
-                        deux.setOpacity(1);
-                    }),
-                    new KeyFrame(Duration.seconds(one), event -> {
-                        deux.setOpacity(0);
-                        un.setOpacity(1);
-                    }),
-                    new KeyFrame(Duration.seconds(vague), event -> {
-                        un.setOpacity(0);
-                        this.modeRapideDeclenche = false;       //rechanche le boolean pour la prochaine vague
-
-                        partie.passerAVagueSuivante();      //change la vague de la classe Jeu
-                        SpawnVagues();      //rappel la méthode pour initialiser une TimeLine avec la taille du nombre de groupes de la vague suivante
-                    })
-            );
-            pauseInterVague.setCycleCount(1);   //programme le timer de pause entre vagues pour se lancer qu'une seule fois
-            pauseInterVague.play();         //lance le timer
-        }
-    }
-
-    private void skipTimerVagues() {
-        if (partie.getGestionnaireVagues().vagueTerminee() && partie.getListeEnnemis().isEmpty()) {
-            if (!modeRapideDeclenche && partie.getVague().get() < partie.getGestionnaireVagues().getNbTotalVagues()) {
-                System.out.println("Tous les ennemis sont morts ! Passage en mode rapide.");
-                modeRapideDeclenche = true;
-
-                // Stoppe la pause longue si elle tourne
-                if (pauseInterVague != null) {
-                    pauseInterVague.stop();
-                }
-                declencherPauseInterVague(1, 2, 3, 3.5, 4);
-            }
-        }
     }
 }

@@ -32,7 +32,7 @@ public class ApparitionUnParUn implements StrategieApparition {
 
     @Override
     public boolean faireApparaitre() {
-        //MAP 2 : Spawn un ennemi à la fois
+        //carte 2 : Spawn un ennemi à la fois
         //Si la file contient déjà des ennemis, on en sort un seul pour ce tic
         if (!fileAttenteSpawn.isEmpty()) {
             partie.ajouterEnnemi(fileAttenteSpawn.remove(0));
