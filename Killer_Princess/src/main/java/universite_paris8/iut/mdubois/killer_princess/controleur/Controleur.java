@@ -64,6 +64,7 @@ public class Controleur implements Initializable {
         //creationEnnemi = new FabriqueInstance(partie);
 
         configurerDragAndDrop();
+        lancerVagues();
 
         inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
 
@@ -80,17 +81,7 @@ public class Controleur implements Initializable {
                 partie.getVague().asString("Vague : %d /4")
         );
 
-        // mode normal avec des vagues
-        if (!ControleurMenu.survie){
-            this.spawner = new AppelVagues(partie);
-            if(partie.getGestionnaireVagues().getVagueActuelle().getNum()<partie.getGestionnaireVagues().getNbTotalVagues()) {
-                SpawnVagues();
-            }
-        }
-        // survie mode
-        else{
-            vagueInfini();
-        }
+
 
         //changement des images du chateau pour la map2
         if (mapSelectionnee == 2) {
@@ -154,6 +145,23 @@ public class Controleur implements Initializable {
         gnd.configurerSourceDrag(BARRICADE_BOIS, TRAPPE, MAGMA, TOUR_ARCHERS, CANON);
         gnd.configurerCibleDrag();
     }
+
+    private void lancerVagues() {
+        // mode normal avec des vagues
+        if (!ControleurMenu.survie){
+            this.spawner = new AppelVagues(partie);
+            if(partie.getGestionnaireVagues().getVagueActuelle().getNum()<partie.getGestionnaireVagues().getNbTotalVagues()) {
+                SpawnVagues();
+            }
+        }
+        // survie mode
+        else{
+            vagueInfini();
+        }
+    }
+
+
+
 //fin des truc bouger
 
     @FXML
