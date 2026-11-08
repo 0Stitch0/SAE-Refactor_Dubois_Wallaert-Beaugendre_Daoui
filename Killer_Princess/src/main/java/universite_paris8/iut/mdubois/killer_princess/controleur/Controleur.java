@@ -63,10 +63,9 @@ public class Controleur implements Initializable {
         initialiseListener();
         //creationEnnemi = new FabriqueInstance(partie);
 
-        inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
+        configurerDragAndDrop();
 
-        gnd.configurerSourceDrag(BARRICADE_BOIS, TRAPPE, MAGMA, TOUR_ARCHERS, CANON);
-        gnd.configurerCibleDrag();
+        inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
 
         panneauTuile.setPickOnBounds(true);
         panneauTuile.setMinSize(960, 740); // 30 colonnes x 21 lignes en 32px
@@ -151,6 +150,10 @@ public class Controleur implements Initializable {
         new ListenerJeu(partie, vuePiege, vueEnnemis, paneEntitee, gnd).activer();
     }
 
+    private void configurerDragAndDrop() {
+        gnd.configurerSourceDrag(BARRICADE_BOIS, TRAPPE, MAGMA, TOUR_ARCHERS, CANON);
+        gnd.configurerCibleDrag();
+    }
 //fin des truc bouger
 
     @FXML
