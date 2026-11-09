@@ -99,7 +99,7 @@ public class ModeVagues implements ModeJeu {
             System.out.println("Tous les ennemis sont morts ! Passage en mode rapide.");
             modeRapideDeclenche = true;
 
-            // Stoppe la pause longue si elle tourne
+            // Stope la pause longue si elle tourne
             pauseInterVague.arreter();
             declencherPauseInterVague(1, 2, 3, 3.5, 4);
         }
