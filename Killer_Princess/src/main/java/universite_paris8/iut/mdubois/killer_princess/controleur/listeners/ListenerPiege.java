@@ -4,7 +4,7 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Pane;
 import universite_paris8.iut.mdubois.killer_princess.controleur.DragAndDrop;
 import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
-import universite_paris8.iut.mdubois.killer_princess.modele.Piege;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Piege;
 import universite_paris8.iut.mdubois.killer_princess.vue.VuePiege;
 
 public class ListenerPiege implements StategieListener {

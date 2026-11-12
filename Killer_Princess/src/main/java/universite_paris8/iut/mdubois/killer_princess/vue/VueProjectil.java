@@ -5,7 +5,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import universite_paris8.iut.mdubois.killer_princess.modele.*;
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours.Canon;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours.TourDarchers;
 
 import java.net.URL;
 import java.util.HashMap;

@@ -2,7 +2,7 @@ package universite_paris8.iut.mdubois.killer_princess.controleur.listeners;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Pane;
-import universite_paris8.iut.mdubois.killer_princess.modele.Ennemi;
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
 import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
 import universite_paris8.iut.mdubois.killer_princess.vue.VueEnnemis;
 

@@ -1,5 +1,7 @@
 package universite_paris8.iut.mdubois.killer_princess.modele;
 
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
+
 import java.util.ArrayList;
 import static universite_paris8.iut.mdubois.killer_princess.modele.Carte.tailleTuile;
 

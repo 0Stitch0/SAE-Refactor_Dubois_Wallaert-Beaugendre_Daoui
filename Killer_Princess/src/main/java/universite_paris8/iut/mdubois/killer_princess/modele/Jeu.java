@@ -4,6 +4,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Piege;
 
 import java.util.ArrayList;
 

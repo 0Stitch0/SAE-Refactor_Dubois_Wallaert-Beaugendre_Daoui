@@ -9,4 +9,7 @@ module universite_paris8.iut.mdubois.killer_princess {
     opens universite_paris8.iut.mdubois.killer_princess.controleur to javafx.fxml;
     opens universite_paris8.iut.mdubois.killer_princess.vue to javafx.fxml;
     opens universite_paris8.iut.mdubois.killer_princess.modele to javafx.fxml;
+    opens universite_paris8.iut.mdubois.killer_princess.modele.ennemis to javafx.fxml;
+    opens universite_paris8.iut.mdubois.killer_princess.modele.pieges to javafx.fxml;
+    opens universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours to javafx.fxml;
 }

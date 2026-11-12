@@ -1,8 +1,11 @@
-package universite_paris8.iut.mdubois.killer_princess.modele;
+package universite_paris8.iut.mdubois.killer_princess.modele.pieges;
+
+import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
 
 import java.util.ArrayList;
 
-public class Trappe extends Piege{
+public class Trappe extends Piege {
 
     public Trappe(double x, double y, Jeu partie){
         super(x, y, partie, 20, 0, "TRAPPE", 10, 20, 0);

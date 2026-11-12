@@ -1,6 +1,6 @@
-package universite_paris8.iut.mdubois.killer_princess.modele;
+package universite_paris8.iut.mdubois.killer_princess.modele.ennemis;
 
-import java.util.ArrayList;
+import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
 
 public class Shrek extends Ennemi {
 
