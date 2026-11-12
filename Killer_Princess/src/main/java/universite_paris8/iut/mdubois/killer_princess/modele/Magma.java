@@ -6,7 +6,7 @@ public class Magma extends Piege {
     private ArrayList<Ennemi> ennemisQuiOntMarche = new ArrayList<>();
 
     public Magma(double x, double y, Jeu partie) {
-        super(x, y, partie, 20, 10, "MAGMA", 10, 20, 30);
+        super(x, y, partie, 20, 2, "MAGMA", 10, 20, 30);
     }
 
     @Override

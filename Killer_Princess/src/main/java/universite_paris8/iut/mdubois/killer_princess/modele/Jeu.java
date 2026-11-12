@@ -203,7 +203,7 @@ public class Jeu {
         Ennemi plusProche = trouverEnnemiLePlusProche();
 
         //Si on a trouvé l'ennemi le plus proche
-        if (plusProche != null /*&& ennemisTues>=15*/) {
+        if (plusProche != null && ennemisTues>=15) {
             //On le "tue" en le retirant directement de la liste d'ennemis
             this.listeEnnemis.remove(plusProche);
             ajouterOr(plusProche.getPrime());       //on gagne l'argent de sa prime
