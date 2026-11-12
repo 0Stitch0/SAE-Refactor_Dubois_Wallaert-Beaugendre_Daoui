@@ -7,9 +7,4 @@ public class Invincible extends Ennemi {
     public Invincible(Jeu partie, int x, int y) {
         super(x,  y, partie,15, 4, "INVINCIBLE", 1, 1);
     }
-
-    @Override
-    public void attaqueP(ArrayList<Ennemi> ennemiSurCase) {
-
-    }
 }

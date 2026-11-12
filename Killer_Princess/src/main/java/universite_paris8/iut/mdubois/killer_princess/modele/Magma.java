@@ -3,40 +3,16 @@ package universite_paris8.iut.mdubois.killer_princess.modele;
 import java.util.ArrayList;
 
 public class Magma extends Piege {
-    private static final int DEGAT = 1;
-    private static final int INTERVALLE = 30; // attaque toutes les demi-secondes
-    private int cooldown = 0;
     private ArrayList<Ennemi> ennemisQuiOntMarche = new ArrayList<>();
 
     public Magma(double x, double y, Jeu partie) {
-        super(x, y, partie, 20, 10, "MAGMA", 10, 20);
-    }
-
-    public boolean enPlace() {
-        return true;
+        super(x, y, partie, 20, 10, "MAGMA", 10, 20, 30);
     }
 
     @Override
-    public void attaqueE(ArrayList<Ennemi> ennemiSurCase) {
-        if (estEnCooldown()) return;
-
+    protected boolean appliquerEffet(ArrayList<Ennemi> ennemiSurCase) {
         enregistrerEnnemisQuiMarchent(ennemiSurCase);
-        boolean aAttaque = infligerDegatsZone(ennemiSurCase);
-
-        if(aAttaque){
-            cooldown = INTERVALLE;
-        }
-    }
-
-    /**
-     * verif si le cooldown est actif
-     */
-    private boolean estEnCooldown() {
-        if(cooldown > 0){
-            cooldown--;
-            return true;
-        }
-        return false;
+        return infligerDegatsZone(ennemiSurCase);
     }
 
     /**
@@ -57,7 +33,7 @@ public class Magma extends Piege {
         boolean aAttaque = false;
         for (Ennemi ennemi : ennemiSurCase){
             if(ennemisQuiOntMarche.contains(ennemi) && estDansZone(ennemi)){
-                ennemi.enleverPdv(DEGAT);
+                ennemi.enleverPdv(getDegats());
                 aAttaque = true;
             }
         }

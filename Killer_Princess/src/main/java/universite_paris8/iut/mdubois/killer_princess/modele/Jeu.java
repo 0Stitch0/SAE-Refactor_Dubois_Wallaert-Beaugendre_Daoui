@@ -143,7 +143,7 @@ public class Jeu {
     public void affichage(){
         for(int i=0; i<listePieges.size(); i++){
             Piege p = listePieges.get(i);
-            System.out.println("cout : " + p.getCout() + " " + "niveau : " + p.getNiveau() + " " + "degat " + p.getDegat());
+            System.out.println("cout : " + p.getCout() + " " + "niveau : " + p.getNiveau() + " " + "degat " + p.getDegats());
         }
     }
 
@@ -151,7 +151,7 @@ public class Jeu {
         Piege piege = getPiegeSelectionne();
 
         if (piege != null) {
-            int cout = piege.getCoutAmelioration();
+            int cout = piege.getCout();
             if (this.or.get() >= cout && piege.getNiveau() < piege.getNivMax()) {   //si l'or possédé est suffisant et que les piège n'a pas atteint son niveau max
                 depenserOr(cout);       //crédite le prix de l'amélioration
                 piege.amelioration();       //améliore le piège

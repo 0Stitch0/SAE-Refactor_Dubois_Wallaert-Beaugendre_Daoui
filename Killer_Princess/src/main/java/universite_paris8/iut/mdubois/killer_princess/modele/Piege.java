@@ -7,24 +7,18 @@ import java.util.ArrayList;
 
 public abstract class Piege extends Entite {
     private int cout;
-    private int degat;
-    private double x, y;
     private int niveau;
     private int nivMax;
-    private String nom;
+    private int intervalle; // l'intervalle entre chaque réinitialisation du compteur de tic
+    private int cooldown = 0; // un compteur de tic
     private final ObservableMap<Object, Object> properties = FXCollections.observableHashMap();
-    public final ObservableMap<Object, Object> getProperties() {
-        return this.properties;
-    }
 
-    public Piege(double x, double y,Jeu partie, int vie, int degat, String nom, int prime, int cout){
+    public Piege(double x, double y,Jeu partie, int vie, int degat, String nom, int prime, int cout, int intervalle){
         super(x, y, partie, vie, degat, nom, prime);
-        this.x = x;
-        this.y = y;
-        this.nom = nom;
         this.cout = cout;
         this.niveau = 1;
         this.nivMax = 3;
+        this.intervalle = intervalle;
     }
 
     public Ennemi EnnemisLePlusProche(ArrayList<Ennemi> ennemis) {
@@ -39,8 +33,12 @@ public abstract class Piege extends Entite {
     }
 
     public void amelioration(){
-        this.setDegat(this.getDegat()+2);
-        this.setNiveau(this.getNiveau()+1);
+        this.setDegats(this.getDegats()+2);
+        this.niveau++;
+    }
+
+    public final ObservableMap<Object, Object> getProperties() {
+        return this.properties;
     }
 
     public int getNiveau(){
@@ -51,26 +49,6 @@ public abstract class Piege extends Entite {
         this.niveau = niveau;
     }
 
-    public double getY(){
-        return y;
-    }
-
-    public double getX(){
-        return x;
-    }
-
-    public void setX(double x){
-        this.x=x;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public int getCoutAmelioration(){
-        return this.cout;
-    }
-
     public int getNivMax(){
         return this.nivMax;
     }
@@ -79,25 +57,31 @@ public abstract class Piege extends Entite {
         return this.cout;
     }
 
+    public int getIntervalle() {
+        return this.intervalle;
+    }
+
     public int prixVente(){
         return this.cout / 2;
     }
 
-    public int getDegat(){
-        return degat;
+    public boolean enPlace() {
+        return true;
     }
 
-    public void setDegat(int degat) {
-        this.degat = degat;
-    }
-    public String getNom(){
-        return this.nom;
-    }
-
-    public abstract boolean enPlace();
+    protected abstract boolean appliquerEffet(ArrayList<Ennemi> ennemiSurCase); //renvois true si l'effet a été appliqué et déclenche le cooldown
 
     /**
      * tous les pieges on une attaque qui se differencie
      */
-    public abstract void attaqueE(ArrayList<Ennemi> ennemiSurCase);
+    public void attaqueE(ArrayList<Ennemi> ennemiSurCase) {
+        if(cooldown > 0) {
+            cooldown--;
+            return;
+        }
+        if(appliquerEffet(ennemiSurCase)) {
+            cooldown = intervalle;
+        }
+
+    }
 }

@@ -182,7 +182,7 @@ public class Controleur implements Initializable {
     // Menu du Jeu
     @FXML
     public void menuJeu(){
-        Son.bruitageSelection();
+        Son.getInstance().bruitageSelection();
         blur.setIterations(1);
         panneauTuile.setEffect(blur);
         paneEntitee.setEffect(blur);
@@ -199,7 +199,7 @@ public class Controleur implements Initializable {
 
     @FXML
     public void backToMenu() throws Exception{
-        Son.bruitageSelection();
+        Son.getInstance().bruitageSelection();
         FXMLLoader vueFx = new FXMLLoader(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/viewMenu.fxml"));
         Pane rootJeu = vueFx.load();
         Stage stage = (Stage) root.getScene().getWindow();
@@ -214,7 +214,7 @@ public class Controleur implements Initializable {
 
     @FXML
     public void restartGame() throws Exception{
-        Son.bruitageSelection();
+        Son.getInstance().bruitageSelection();
         FXMLLoader vueFx = new FXMLLoader(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/view.fxml"));
         Pane rootJeu = vueFx.load();
         Stage stage = (Stage) root.getScene().getWindow();
@@ -224,7 +224,7 @@ public class Controleur implements Initializable {
 
     @FXML
     public void returnToGame(){
-        Son.bruitageSelection();
+        Son.getInstance().bruitageSelection();
         blur.setIterations(0);
         menuJeu.setOpacity(0);
         menuJeu.setMouseTransparent(true);
@@ -299,7 +299,7 @@ public class Controleur implements Initializable {
 
     @FXML
     public void basculerPause(){
-        Son.bruitageSelection();
+        Son.getInstance().bruitageSelection();
         switchPause();
     }
     public void finPartie() {

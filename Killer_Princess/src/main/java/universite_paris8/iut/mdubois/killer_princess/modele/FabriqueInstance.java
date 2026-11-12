@@ -28,23 +28,17 @@ public class FabriqueInstance {
         }
     }
 
-    // Pour le mode Survie, vérifie une valeur entre 2
-    public boolean estEntre(int chiffre, int limiteBas, int limitHaut){
-        return chiffre > limiteBas && chiffre <= limitHaut;
-    }
-
-
     // Pour le mode Survie car choisit aléatoire appelé par le controleur
-    public String retournerStringEnnemi (int chiffre){
-        if (estEntre(chiffre, 1, 5))
+    public String retournerStringEnnemi (int tirage){
+        if (tirage <= 5)
             return "INVINCIBLE";
-        if(estEntre(chiffre, 5, 15))
+        if(tirage <= 15)
             return "PRINCE";
-        if(estEntre(chiffre, 15, 35))
+        if(tirage <= 35)
             return "SHREK";
-        if(estEntre(chiffre, 35, 65))
+        if(tirage <= 65)
             return "CHEVALIER";
-        if (estEntre(chiffre, 65, 100))
+        if (tirage <= 100)
             return "GOBELIN";
         return null;
     }
