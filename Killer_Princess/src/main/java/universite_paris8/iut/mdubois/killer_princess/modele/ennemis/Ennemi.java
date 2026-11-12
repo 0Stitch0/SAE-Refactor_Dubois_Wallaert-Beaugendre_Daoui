@@ -1,4 +1,5 @@
 package universite_paris8.iut.mdubois.killer_princess.modele.ennemis;
+import universite_paris8.iut.mdubois.killer_princess.modele.EnMouvement;
 import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
 
 public abstract class Ennemi extends EnMouvement {
