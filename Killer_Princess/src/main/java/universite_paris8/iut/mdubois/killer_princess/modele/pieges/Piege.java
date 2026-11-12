@@ -1,7 +1,10 @@
-package universite_paris8.iut.mdubois.killer_princess.modele;
+package universite_paris8.iut.mdubois.killer_princess.modele.pieges;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import universite_paris8.iut.mdubois.killer_princess.modele.Entite;
+import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
 
 import java.util.ArrayList;
 
@@ -13,7 +16,7 @@ public abstract class Piege extends Entite {
     private int cooldown = 0; // un compteur de tic
     private final ObservableMap<Object, Object> properties = FXCollections.observableHashMap();
 
-    public Piege(double x, double y,Jeu partie, int vie, int degat, String nom, int prime, int cout, int intervalle){
+    public Piege(double x, double y, Jeu partie, int vie, int degat, String nom, int prime, int cout, int intervalle){
         super(x, y, partie, vie, degat, nom, prime);
         this.cout = cout;
         this.niveau = 1;

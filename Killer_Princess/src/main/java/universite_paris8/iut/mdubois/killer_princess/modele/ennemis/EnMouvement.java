@@ -1,12 +1,14 @@
-package universite_paris8.iut.mdubois.killer_princess.modele;
+package universite_paris8.iut.mdubois.killer_princess.modele.ennemis;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import universite_paris8.iut.mdubois.killer_princess.modele.*;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Destructible;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Piege;
 
 import java.util.ArrayList;
 

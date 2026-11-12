@@ -5,8 +5,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
-import universite_paris8.iut.mdubois.killer_princess.modele.Piege;
-import universite_paris8.iut.mdubois.killer_princess.vue.VuePiege;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Piege;
 
 public class GestionnaireClic {
     private Jeu partie;

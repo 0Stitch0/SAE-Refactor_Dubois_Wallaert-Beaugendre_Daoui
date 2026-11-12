@@ -2,10 +2,9 @@ package universite_paris8.iut.mdubois.killer_princess.controleur.modesJeu;
 
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-import universite_paris8.iut.mdubois.killer_princess.controleur.*;
 import universite_paris8.iut.mdubois.killer_princess.controleur.chrono.ChronoSpawn;
 import universite_paris8.iut.mdubois.killer_princess.modele.*;
-import universite_paris8.iut.mdubois.killer_princess.vue.*;
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
 
 public class ModeSurvie implements ModeJeu {
     private final Jeu partie;

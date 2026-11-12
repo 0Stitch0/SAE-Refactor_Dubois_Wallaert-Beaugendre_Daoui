@@ -1,5 +1,10 @@
 package universite_paris8.iut.mdubois.killer_princess.modele;
 
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.*;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.*;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours.Canon;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours.TourDarchers;
+
 public class FabriqueInstance {
     private Jeu partie;
 

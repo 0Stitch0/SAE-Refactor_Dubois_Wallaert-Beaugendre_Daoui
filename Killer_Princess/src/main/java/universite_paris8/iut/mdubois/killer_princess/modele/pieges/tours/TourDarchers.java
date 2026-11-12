@@ -1,4 +1,6 @@
-package universite_paris8.iut.mdubois.killer_princess.modele;
+package universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours;
+
+import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
 
 public class TourDarchers extends Tour {
     public TourDarchers(double x, double y, Jeu partie){

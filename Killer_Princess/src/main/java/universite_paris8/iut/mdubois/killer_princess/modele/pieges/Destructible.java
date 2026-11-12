@@ -1,7 +1,7 @@
-package universite_paris8.iut.mdubois.killer_princess.modele;
+package universite_paris8.iut.mdubois.killer_princess.modele.pieges;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
 
 public abstract class Destructible extends Piege {
 

@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,6 +22,10 @@ import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.Apparition
 import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.ApparitionUnParUn;
 import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.StrategieApparition;
 import universite_paris8.iut.mdubois.killer_princess.modele.*;
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours.Canon;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Piege;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours.TourDarchers;
 import universite_paris8.iut.mdubois.killer_princess.vue.*;
 
 import java.net.URL;

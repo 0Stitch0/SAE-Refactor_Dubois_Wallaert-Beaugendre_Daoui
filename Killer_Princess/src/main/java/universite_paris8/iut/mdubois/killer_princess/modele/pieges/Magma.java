@@ -1,4 +1,7 @@
-package universite_paris8.iut.mdubois.killer_princess.modele;
+package universite_paris8.iut.mdubois.killer_princess.modele.pieges;
+
+import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
 
 import java.util.ArrayList;
 

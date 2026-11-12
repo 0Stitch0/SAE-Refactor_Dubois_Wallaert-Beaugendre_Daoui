@@ -1,8 +1,7 @@
-package universite_paris8.iut.mdubois.killer_princess.modele;
-import javafx.beans.property.*;
-import java.util.ArrayList;
+package universite_paris8.iut.mdubois.killer_princess.modele.ennemis;
+import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
 
-public abstract class Ennemi extends EnMouvement{
+public abstract class Ennemi extends EnMouvement {
 
     public Ennemi(double x, double y, Jeu partie, int vie, int degats, String nom, double vitesse, int prime) {
         super(x, y, partie, vie, degats, nom, vitesse, prime);

@@ -5,8 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import universite_paris8.iut.mdubois.killer_princess.controleur.GestionnaireClic;
-import universite_paris8.iut.mdubois.killer_princess.modele.Destructible;
-import universite_paris8.iut.mdubois.killer_princess.modele.Piege;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Destructible;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Piege;
 import java.util.HashMap;
 
 import static universite_paris8.iut.mdubois.killer_princess.modele.Carte.tailleTuile;
