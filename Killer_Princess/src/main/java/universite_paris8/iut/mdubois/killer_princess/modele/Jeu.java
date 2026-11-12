@@ -11,49 +11,49 @@ import java.util.ArrayList;
 import static universite_paris8.iut.mdubois.killer_princess.modele.Carte.tailleTuile;
 
 public class Jeu {
-    private IntegerProperty or;
-    private ObservableList<Piege> listePieges;
-    private ObservableList<Ennemi> listeEnnemis;
+
+    private final IntegerProperty or;
+    private final ObservableList<Piege> listePieges;
+    private final ObservableList<Ennemi> listeEnnemis;
     private static final int OR_INITIAL = 200;
-    private Carte carte;
+
+    private final Carte carte;
     private Piege piegeSelectionne;
-    private GestionnaireVagues gestionnaireVagues;
-    private IntegerProperty vague;
+    private final GestionnaireVagues gestionnaireVagues;
+    private final IntegerProperty vague;
     private int ennemisTues;
-    private Case porte;
+    private final Case porte;
     private final int x_Porte;
     private final int y_Porte;
-    private int modeJeu;
+    private final int modeJeu;
 
     public Jeu(int modeJeu) {
         this.or = new SimpleIntegerProperty(OR_INITIAL);
         this.vague = new SimpleIntegerProperty(1);
         this.listePieges = FXCollections.observableArrayList();
         this.listeEnnemis = FXCollections.observableArrayList();
+
         this.carte = new Carte(modeJeu);
         this.gestionnaireVagues = new GestionnaireVagues();
-        this.carte = new Carte(modeJeu);
+
         this.ennemisTues = 0;
         this.modeJeu = modeJeu;
-        porte = carte.trouverTuile(100);
+
+        this.porte = carte.trouverTuile(100);
         this.x_Porte = porte.getColonne() * tailleTuile;
         this.y_Porte = porte.getLigne() * tailleTuile;
     }
 
-    // Vérifie si la case est déjà occupée par un piège
+    // Vérifie si une case est déjà occupée par un piège
     public boolean caseOccupee(int ligne, int colonne) {
-        boolean caseOcc = false;
-        int i = 0;
-
-        while (i < listePieges.size() && !caseOcc) {
-            if (listePieges.get(i).getX() == colonne
-                    && listePieges.get(i).getY() == ligne) {
-                caseOcc = true;
+        for (Piege piege : listePieges) {
+            if (piege.getX() == colonne
+                    && piege.getY() == ligne) {
+                return true;
             }
-            i++;
         }
 
-        return caseOcc;
+        return false;
     }
 
     // Tente de placer un piège sur la carte
@@ -79,11 +79,14 @@ public class Jeu {
 
         ajouterPiege(nouveauPiege);
         depenserOr(cout);
+
         return true;
     }
 
     // Vérifie que la case est libre et autorisée pour ce piège
-    private boolean caseValidePourPiege(String type, int col, int lig) {
+    private boolean caseValidePourPiege(
+            String type, int col, int lig) {
+
         return !caseOccupee(lig, col)
                 && carte.peutPoserPiege(
                         col * tailleTuile, lig * tailleTuile, type);
@@ -116,12 +119,12 @@ public class Jeu {
         }
     }
 
-    // Récupère les ennemis vivants pour les attaques des pièges
+    // Récupère les ennemis vivants
     private ArrayList<Ennemi> obtenirEnnemisVivants() {
         ArrayList<Ennemi> ennemisVivants = new ArrayList<>();
 
         for (Ennemi e : listeEnnemis) {
-            if (!e.estMort()) {
+            if (e != null && !e.estMort()) {
                 ennemisVivants.add(e);
             }
         }
@@ -130,7 +133,9 @@ public class Jeu {
     }
 
     // Fait attaquer les pièges contre les ennemis vivants
-    private void faireAttaquerPieges(ArrayList<Ennemi> ennemisVivants) {
+    private void faireAttaquerPieges(
+            ArrayList<Ennemi> ennemisVivants) {
+
         for (Piege p : listePieges) {
             p.attaqueE(ennemisVivants);
         }
@@ -149,7 +154,7 @@ public class Jeu {
         }
     }
 
-    // Supprime les pièges qui ne sont plus en place
+    // Supprime les pièges détruits
     private void supprimerPiegesDetruits() {
         for (int i = 0; i < listePieges.size(); i++) {
             if (!listePieges.get(i).enPlace()) {
@@ -161,46 +166,52 @@ public class Jeu {
 
     public void passerAVagueSuivante() {
         this.vague.set(this.vague.get() + 1);
-        System.out.println("Passage à la vague numéro : " + this.vague);
+
+        System.out.println(
+                "Passage à la vague numéro : " + this.vague.get());
+
         this.gestionnaireVagues.vagueSuivante();
     }
 
-    /*public boolean estPartiePerdue() {
-        return this.listeEnnemis;
-    }*/
-
     public void supprimerEnnemi(Ennemi e) {
         listeEnnemis.remove(e);
-        // ennemisTues++;
     }
 
     public void affichage() {
-        for (int i = 0; i < listePieges.size(); i++) {
-            Piege p = listePieges.get(i);
-            System.out.println("cout : " + p.getCout()
+        for (Piege p : listePieges) {
+            System.out.println(
+                    "cout : " + p.getCout()
                     + " niveau : " + p.getNiveau()
                     + " degat " + p.getDegat());
         }
     }
 
+    // Améliore le piège sélectionné
     public void AmeliorerPiege() {
         Piege piege = getPiegeSelectionne();
 
         if (piege != null) {
             int cout = piege.getCoutAmelioration();
 
-            if (this.or.get() >= cout
-                    && piege.getNiveau() < piege.getNivMax()) {
+            if (peutAmeliorer(piege, cout)) {
                 depenserOr(cout);
                 piege.amelioration();
             } else {
-                System.out.println("Pas assez d'or pour améliorer !");
+                System.out.println(
+                        "Pas assez d'or pour améliorer !");
             }
 
             deselectionner();
         }
     }
 
+    // Vérifie si le piège peut être amélioré
+    private boolean peutAmeliorer(Piege piege, int cout) {
+        return this.or.get() >= cout
+                && piege.getNiveau() < piege.getNivMax();
+    }
+
+    // Vend le piège sélectionné
     public void VendrePiege() {
         Piege piege = getPiegeSelectionne();
 
@@ -252,7 +263,7 @@ public class Jeu {
     public void declencherBouleDeFeu() {
         Ennemi plusProche = trouverEnnemiLePlusProche();
 
-        if (plusProche != null /*&& ennemisTues>=15*/) {
+        if (plusProche != null /*&& ennemisTues >= 15*/) {
             this.listeEnnemis.remove(plusProche);
             ajouterOr(plusProche.getPrime());
             this.ennemisTues = 1;
@@ -262,16 +273,16 @@ public class Jeu {
     // Conditions de victoire et de défaite
     public boolean estPartieGagnee() {
         return this.gestionnaireVagues.vagueTerminee()
-                && this.vague.get() >= this.gestionnaireVagues.getNbTotalVagues()
+                && this.vague.get()
+                >= this.gestionnaireVagues.getNbTotalVagues()
                 && this.listeEnnemis.isEmpty();
     }
 
     public boolean estPartiePerdue() {
-        if (listeEnnemis != null) {
-            for (Ennemi e : listeEnnemis) {
-                if (e.getX() == x_Porte && e.getY() == y_Porte) {
-                    return true;
-                }
+        for (Ennemi e : listeEnnemis) {
+            if (e != null && e.getX() == x_Porte
+                    && e.getY() == y_Porte) {
+                return true;
             }
         }
 
@@ -300,7 +311,8 @@ public class Jeu {
         this.piegeSelectionne = p;
 
         if (p != null) {
-            System.out.println("Piège sélectionné (Niveau "
+            System.out.println(
+                    "Piège sélectionné (Niveau "
                     + p.getNiveau() + ")");
         }
     }
@@ -394,6 +406,7 @@ public class Jeu {
             return null;
         }
 
-        return this.listePieges.get(this.listePieges.size() - 1);
+        return this.listePieges.get(
+                this.listePieges.size() - 1);
     }
 }

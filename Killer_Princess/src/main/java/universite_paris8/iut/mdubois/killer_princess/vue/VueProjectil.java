@@ -10,20 +10,25 @@ import universite_paris8.iut.mdubois.killer_princess.modele.*;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 public class VueProjectil {
 
-    private final HashMap<String, Image> imagesProjectils;
+    private static final double LARGEUR_PROJECTILE = 12;
+    private static final double HAUTEUR_PROJECTILE = 12;
+    private static final double DECALAGE_DEPART_X = 10;
+    private static final double DECALAGE_DEPART_Y = 16;
+    private static final double DECALAGE_CIBLE_X = 10;
+    private static final double DECALAGE_CIBLE_Y = 16;
+    private static final double DUREE_ANIMATION = 300;
+
+    private final Map<String, Image> imagesProjectils;
 
     public VueProjectil() {
         imagesProjectils = new HashMap<>();
         initialiserImages();
     }
 
-    /**
-     * Charge une image à partir de son chemin.
-     * Affiche un message dans le terminal si l'image est introuvable.
-     */
     public Image creerImage(String chemin) {
         URL urlIm = getClass().getResource(chemin);
 
@@ -35,9 +40,6 @@ public class VueProjectil {
         return new Image(urlIm.toString());
     }
 
-    /**
-     * Charge une image et l'associe à un nom pour pouvoir la réutiliser.
-     */
     public void ajouterImageBoulet(String nom, String chemin) {
         Image image = creerImage(chemin);
 
@@ -46,9 +48,6 @@ public class VueProjectil {
         }
     }
 
-    /**
-     * Initialise les images utilisées par les projectiles.
-     */
     private void initialiserImages() {
         ajouterImageBoulet(
                 "boulet",
@@ -61,24 +60,14 @@ public class VueProjectil {
         );
     }
 
-    /**
-     * Lance un boulet depuis un canon vers un ennemi.
-     */
     public void lancerBoulet(Canon canon, Ennemi cible, Pane pan) {
         lancerProjectil("boulet", canon.getX(), canon.getY(), cible, pan);
     }
 
-    /**
-     * Lance une flèche depuis une tour d'archers vers un ennemi.
-     */
     public void lancerFleche(TourDarchers tour, Ennemi cible, Pane pan) {
         lancerProjectil("fleche", tour.getX(), tour.getY(), cible, pan);
     }
 
-    /**
-     * Crée le projectile, le positionne dans le panneau
-     * puis démarre son animation.
-     */
     private void lancerProjectil(
             String nomProject,
             double departX,
@@ -86,36 +75,32 @@ public class VueProjectil {
             Ennemi cible,
             Pane pan
     ) {
-        ImageView projectil = creerImageProjectil(nomProject);
+        ImageView projectile = creerImageProjectil(nomProject);
 
-        if (projectil == null) {
+        if (projectile == null) {
             return;
         }
 
-        positionnerProjectile(projectil, departX, departY);
-        pan.getChildren().add(projectil);
+        positionnerProjectile(projectile, departX, departY);
+        pan.getChildren().add(projectile);
 
         TranslateTransition transition =
-                creerTransitionProjectile(projectil, departX, departY, cible, pan);
+                creerTransitionProjectile(
+                        projectile, departX, departY, cible, pan
+                );
 
         transition.play();
     }
 
-    /**
-     * Positionne le projectile à son point de départ.
-     */
     private void positionnerProjectile(
-            ImageView projectil,
+            ImageView projectile,
             double departX,
             double departY
     ) {
-        projectil.setLayoutX(departX + 10);
-        projectil.setLayoutY(departY + 16);
+        projectile.setLayoutX(departX + DECALAGE_DEPART_X);
+        projectile.setLayoutY(departY + DECALAGE_DEPART_Y);
     }
 
-    /**
-     * Crée l'image du projectile et définit ses dimensions.
-     */
     private ImageView creerImageProjectil(String nom) {
         Image image = imagesProjectils.get(nom);
 
@@ -123,31 +108,39 @@ public class VueProjectil {
             return null;
         }
 
-        ImageView projectil = new ImageView(image);
-        projectil.setFitWidth(12);
-        projectil.setFitHeight(12);
+        ImageView projectile = new ImageView(image);
+        projectile.setFitWidth(LARGEUR_PROJECTILE);
+        projectile.setFitHeight(HAUTEUR_PROJECTILE);
 
-        return projectil;
+        return projectile;
     }
 
-    /**
-     * Crée l'animation qui déplace le projectile vers sa cible.
-     * Retire le projectile du panneau lorsque l'animation se termine.
-     */
     private TranslateTransition creerTransitionProjectile(
-            ImageView projectil,
+            ImageView projectile,
             double departX,
             double departY,
             Ennemi cible,
             Pane pan
     ) {
         TranslateTransition transition =
-                new TranslateTransition(Duration.millis(300), projectil);
+                new TranslateTransition(
+                        Duration.millis(DUREE_ANIMATION),
+                        projectile
+                );
 
-        transition.setByX((cible.getX() + 10) - (departX + 16));
-        transition.setByY((cible.getY() + 16) - (departY + 16));
+        transition.setByX(
+                (cible.getX() + DECALAGE_CIBLE_X)
+                        - (departX + DECALAGE_DEPART_Y)
+        );
 
-        transition.setOnFinished(e -> pan.getChildren().remove(projectil));
+        transition.setByY(
+                (cible.getY() + DECALAGE_CIBLE_Y)
+                        - (departY + DECALAGE_DEPART_Y)
+        );
+
+        transition.setOnFinished(e ->
+                pan.getChildren().remove(projectile)
+        );
 
         return transition;
     }
