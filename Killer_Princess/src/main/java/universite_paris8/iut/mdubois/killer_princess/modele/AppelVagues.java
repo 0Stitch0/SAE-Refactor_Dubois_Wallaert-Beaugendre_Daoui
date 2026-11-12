@@ -1,3 +1,4 @@
+
 package universite_paris8.iut.mdubois.killer_princess.modele;
 
 import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
@@ -6,9 +7,14 @@ import java.util.ArrayList;
 import static universite_paris8.iut.mdubois.killer_princess.modele.Carte.tailleTuile;
 
 public class AppelVagues {
-    private Jeu partie;
-    private GestionnaireVagues gestionnaireVagues;
-    private FabriqueInstance fabriqueEnnemis;
+
+    private static final int MIN_LIGNE_DEPART = 1;
+    private static final int MAX_LIGNE_DEPART = 19;
+    private static final int COLONNE_DEPART = 29;
+
+    private final Jeu partie;
+    private final GestionnaireVagues gestionnaireVagues;
+    private final FabriqueInstance fabriqueEnnemis;
 
     public AppelVagues(Jeu partie) {
         this.partie = partie;
@@ -17,43 +23,51 @@ public class AppelVagues {
     }
 
     public ArrayList<Ennemi> spawnUnGroupe() {
-        GroupeParVague groupeMetier = partie.getGestionnaireVagues().getVagueActuelle().appelrochainGroupe();       //cherche le groupe de la vague actuelle de la classe Jeu
+        GroupeParVague groupeMetier =
+                gestionnaireVagues.getVagueActuelle().appelrochainGroupe();
 
-        //Si le groupe est null
-        if (groupeMetier == null) {     //et que la vague est finie, on passe à la vague suivante
+        if (groupeMetier == null) {
             if (gestionnaireVagues.vagueTerminee()) {
                 gestionnaireVagues.vagueSuivante();
             }
-            return null;    //on retourne null dans tous les cas
+            return null;
         }
 
         ArrayList<Ennemi> ennemisCrees = new ArrayList<>();
 
         for (String type : groupeMetier.getTypesEnnemis()) {
-            int caseDepartX, caseDepartY;
-
-            if(partie.getModeJeu() == 1) {
-                int minLigne = 1;
-                int maxLigne = 19;
-                caseDepartY = minLigne + (int) (Math.random() * ((maxLigne - minLigne) + 1));
-
-                caseDepartX = 29;
-            }
-            else{
-                Case caseDepart = partie.getCarte().trouverTuile(groupeMetier.getIdEntree());
-                caseDepartX = caseDepart.getColonne();
-                caseDepartY = caseDepart.getLigne();
-            }
-
-            // Conversion en pixels
-            int pixelX = caseDepartX * tailleTuile;
-            int pixelY = caseDepartY * tailleTuile;
-
-            Ennemi nouveau = fabriqueEnnemis.creerInstanceEnnemi(type, pixelX, pixelY);
-            partie.ajouterEnnemi(nouveau);
-
-            ennemisCrees.add(nouveau);
+            Ennemi ennemi = creerEnnemi(type, groupeMetier);
+            partie.ajouterEnnemi(ennemi);
+            ennemisCrees.add(ennemi);
         }
+
         return ennemisCrees;
+    }
+
+    private Ennemi creerEnnemi(String type, GroupeParVague groupeMetier) {
+        int caseDepartX;
+        int caseDepartY;
+
+        if (partie.getModeJeu() == 1) {
+            caseDepartY = genererLigneDepartAleatoire();
+            caseDepartX = COLONNE_DEPART;
+        } else {
+            Case caseDepart =
+                    partie.getCarte().trouverTuile(groupeMetier.getIdEntree());
+
+            caseDepartX = caseDepart.getColonne();
+            caseDepartY = caseDepart.getLigne();
+        }
+
+        int pixelX = caseDepartX * tailleTuile;
+        int pixelY = caseDepartY * tailleTuile;
+
+        return fabriqueEnnemis.creerInstanceEnnemi(type, pixelX, pixelY);
+    }
+
+    private int genererLigneDepartAleatoire() {
+        return MIN_LIGNE_DEPART
+                + (int) (Math.random()
+                * (MAX_LIGNE_DEPART - MIN_LIGNE_DEPART + 1));
     }
 }
