@@ -139,6 +139,7 @@ public class Jeu {
             if (e.estMort()) {
                 supprimerEnnemi(e);
                 ajouterOr(e.getPrime());
+                ennemisTues++;//pour la condition de l'attaque du dragon
                 i--;
             }
         }
@@ -244,10 +245,10 @@ public class Jeu {
     public void declencherBouleDeFeu() {
         Ennemi plusProche = trouverEnnemiLePlusProche();
 
-        if (plusProche != null /*&& ennemisTues >= 15*/) {
+        if (plusProche != null && ennemisTues >= 15) {
             this.listeEnnemis.remove(plusProche);
             ajouterOr(plusProche.getPrime());
-            this.ennemisTues = 1;
+            this.ennemisTues = 0;
         }
     }
 
