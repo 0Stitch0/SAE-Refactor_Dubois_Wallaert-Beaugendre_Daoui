@@ -131,7 +131,10 @@ public abstract class EnMouvement extends Entite {
     // Cherche un piège destructible devant et l'attaque
     private boolean attaquerPiegeEnFace() {
         Destructible piegeDevant = trouverPiegeDevant();
-        if (piegeDevant == null) return false;
+        if (piegeDevant == null) {
+            attaqueProperty().set(false);//pemet de mettre le gif attaque que quand il rencontre un piege
+            return false;
+        }
 
         effectuerAttaque(piegeDevant);
         return true;
