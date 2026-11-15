@@ -171,7 +171,8 @@ public class Controleur implements Initializable {
             paneEntitee.setPickOnBounds(false);
         }
         goldDisplay.textProperty().bind( partie.getOr().asString("Or : %d") );
-        waveDisplay.textProperty().bind( partie.getVague().asString("Vague : %d /4") );
+        int nbTotalVagues = partie.getGestionnaireVagues().getNbTotalVagues();
+        waveDisplay.textProperty().bind( partie.getVague().asString("Vague : %d / " + nbTotalVagues) );
     }
 
     @FXML
