@@ -13,20 +13,20 @@ public class FabriqueInstance {
     }
 
     //crée le piège
-    public Piege creerInstancePiege(String type, double x, double y) {
+    public Piege creerInstancePiege(TypePiege type, double x, double y) {
         switch (type) {
-            case "BARRICADE_BOIS":
+            case BARRICADE_BOIS:
                 return new BarricadeBois(x, y, partie);
-            case "TOUR_ARCHERS":
+            case TOUR_ARCHERS:
                 return new TourDarchers(x, y, partie);
-            case "CANON":
+            case CANON:
                 return new Canon(x, y, partie);
-            case "MAGMA":
+            case MAGMA:
                 return new Magma(x, y, partie);
-            case "TRAPPE":
+            case TRAPPE:
                 return new Trappe(x, y, partie);
                 //cree squelette voir apres les attaque des autres pieges
-//            case "SQUELETTE":
+//            case SQUELETTE:
 //                return new Squelette(x, y, partie);
             default:
                 return null;
@@ -34,38 +34,38 @@ public class FabriqueInstance {
     }
 
     // Pour le mode Survie car choisit aléatoire appelé par le controleur
-    public String retournerStringEnnemi (int tirage){
+    public TypeEnnemi retournerTypeEnnemi (int tirage){
         if (tirage <= 5)
-            return "INVINCIBLE";
+            return TypeEnnemi.INVINCIBLE;
         if(tirage <= 15)
-            return "PRINCE";
+            return TypeEnnemi.PRINCE;
         if(tirage <= 35)
-            return "SHREK";
+            return TypeEnnemi.SHREK;
         if(tirage <= 65)
-            return "CHEVALIER";
+            return TypeEnnemi.CHEVALIER;
         if (tirage <= 100)
-            return "GOBELIN";
+            return TypeEnnemi.GOBELIN;
         return null;
     }
 
-    public Ennemi creerInstanceEnnemi(String type, int x, int y) {
+    public Ennemi creerInstanceEnnemi(TypeEnnemi type, int x, int y) {
         switch (type) {
-            case "GOBELIN":
+            case GOBELIN:
                 return new Gobelin(partie, x, y);
-            case "CHEVALIER":
+            case CHEVALIER:
                 return new Chevalier(partie, x, y);
-            case "SHREK":
+            case SHREK:
                 return new Shrek(partie, x, y);
-            case "PRINCE":
+            case PRINCE:
                 return new Prince(partie, x, y);
-            case "INVINCIBLE":
+            case INVINCIBLE:
                 return new Invincible(partie, x, y);
             default:
                 return null;
         }
     }
 
-    public int getCoutPour(String type) {
+    public int getCoutPour(TypePiege type) {
         Piege piegeTemporaire = this.creerInstancePiege(type, 0, 0);
         if (piegeTemporaire != null) {
             return piegeTemporaire.getCout();

@@ -5,6 +5,8 @@ package universite_paris8.iut.mdubois.killer_princess.modele;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Rectangle2D;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.TypePiege;
+
 import java.util.ArrayList;
 import java.util.*;
 
@@ -284,7 +286,7 @@ public class Carte {
         return 0;
     }
 
-    public boolean peutPoserPiege(double pixelX, double pixelY, String typePiege) {
+    public boolean peutPoserPiege(double pixelX, double pixelY, TypePiege typePiege) {
         // Convertir les pixels en coordonnées de la carte
         int col = (int) (pixelX / tailleTuile);
         int lig = (int) (pixelY / tailleTuile);
@@ -300,18 +302,13 @@ public class Carte {
         return estTuileAutorisee(idTuile, typePiege);
     }
 
-    private boolean estTuileAutorisee(int idTuile, String typePiege) {
+    private boolean estTuileAutorisee(int idTuile, TypePiege typePiege) {
         // Sur la carte 2, les tours et les canons se posent sur la tuile 21
-        if (modeJeu == 2 && estTourOuCanon(typePiege)) {
+        if (modeJeu == 2 && typePiege.estTour()) {
             return idTuile == 21;
         }
 
         // Les autres pièges se posent sur les tuiles d'herbe
         return idTuile >= 12 && idTuile < 20;
-    }
-
-    private boolean estTourOuCanon(String typePiege) {
-        return "TOUR_ARCHERS".equals(typePiege)
-                || "CANON".equals(typePiege);
     }
 }

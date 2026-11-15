@@ -2,6 +2,7 @@
 package universite_paris8.iut.mdubois.killer_princess.modele;
 
 import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.TypeEnnemi;
 
 import java.util.ArrayList;
 import static universite_paris8.iut.mdubois.killer_princess.modele.Carte.tailleTuile;
@@ -35,7 +36,7 @@ public class AppelVagues {
 
         ArrayList<Ennemi> ennemisCrees = new ArrayList<>();
 
-        for (String type : groupeMetier.getTypesEnnemis()) {
+        for (TypeEnnemi type : groupeMetier.getTypesEnnemis()) {
             Ennemi ennemi = creerEnnemi(type, groupeMetier);
             partie.ajouterEnnemi(ennemi);
             ennemisCrees.add(ennemi);
@@ -44,7 +45,7 @@ public class AppelVagues {
         return ennemisCrees;
     }
 
-    private Ennemi creerEnnemi(String type, GroupeParVague groupeMetier) {
+    private Ennemi creerEnnemi(TypeEnnemi type, GroupeParVague groupeMetier) {
         int caseDepartX;
         int caseDepartY;
 

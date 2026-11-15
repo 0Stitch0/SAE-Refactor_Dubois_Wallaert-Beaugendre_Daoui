@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
 import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Piege;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.TypePiege;
 
 import java.util.ArrayList;
 
@@ -57,7 +58,7 @@ public class Jeu {
     }
 
     // Tente de placer un piège sur la carte
-    public boolean tenterPlacerPiege(String type, int col, int lig, FabriqueInstance fabriquePiege) {
+    public boolean tenterPlacerPiege(TypePiege type, int col, int lig, FabriqueInstance fabriquePiege) {
         if (!caseValidePourPiege(type, col, lig)) {
             return false;
         }
@@ -79,7 +80,7 @@ public class Jeu {
     }
 
     // Vérifie que la case est libre et autorisée pour ce piège
-    private boolean caseValidePourPiege(String type, int col, int lig) {
+    private boolean caseValidePourPiege(TypePiege type, int col, int lig) {
 
         return !caseOccupee(lig, col)
                 && carte.peutPoserPiege(

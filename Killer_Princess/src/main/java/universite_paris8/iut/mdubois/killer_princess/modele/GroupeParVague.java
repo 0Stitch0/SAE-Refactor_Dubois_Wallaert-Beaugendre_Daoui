@@ -1,9 +1,11 @@
 package universite_paris8.iut.mdubois.killer_princess.modele;
 
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.TypeEnnemi;
+
 import java.util.ArrayList;
 
 public class GroupeParVague {
-    private ArrayList<String> typesEnnemis;
+    private ArrayList<TypeEnnemi> typesEnnemis;
     private int idEntree;
 
     public GroupeParVague(int idEntree) {
@@ -11,13 +13,13 @@ public class GroupeParVague {
         this.idEntree = idEntree;
     }
 
-    public void ajouterEnnemi(String type, int nb) {
+    public void ajouterEnnemi(TypeEnnemi type, int nb) {
         for (int i = 0; i < nb; i++) {
             this.typesEnnemis.add(type);
         }
     }
 
-    public ArrayList<String> getTypesEnnemis() {
+    public ArrayList<TypeEnnemi> getTypesEnnemis() {
         return this.typesEnnemis;
     }
 

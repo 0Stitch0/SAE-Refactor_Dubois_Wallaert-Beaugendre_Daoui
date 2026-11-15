@@ -5,6 +5,7 @@ import javafx.util.Duration;
 import universite_paris8.iut.mdubois.killer_princess.controleur.chrono.ChronoSpawn;
 import universite_paris8.iut.mdubois.killer_princess.modele.*;
 import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.TypeEnnemi;
 
 public class ModeSurvie implements ModeJeu {
     private final Jeu partie;
@@ -25,9 +26,9 @@ public class ModeSurvie implements ModeJeu {
             int aleatoirePositionY;
             aleatoireEnnemi = (int) (Math.random() * 100) + 1;
             aleatoirePositionY = (int) (Math.random() * 19) + 1;
-            String ennemiNom = fabriqueInstance.retournerStringEnnemi(aleatoireEnnemi);
+            TypeEnnemi typeEnnemi = fabriqueInstance.retournerTypeEnnemi(aleatoireEnnemi);
             // 31 est mieux que 32 car ennemie a moitié sur la map
-            Ennemi ennemi = fabriqueInstance.creerInstanceEnnemi(ennemiNom, 29 * 31, aleatoirePositionY * 31);
+            Ennemi ennemi = fabriqueInstance.creerInstanceEnnemi(typeEnnemi, 29 * 31, aleatoirePositionY * 31);
             partie.ajouterEnnemi(ennemi);
         });
     }

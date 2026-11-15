@@ -10,6 +10,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.image.Image;
 import universite_paris8.iut.mdubois.killer_princess.modele.FabriqueInstance;
 import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.TypePiege;
 
 import static universite_paris8.iut.mdubois.killer_princess.modele.Carte.tailleTuile;
 
@@ -51,9 +52,9 @@ public class DragAndDrop {
                 if (!controleur.isPaused()) {
 
                     ImageView boutonClique = (ImageView) event.getSource();     //trouve sur quel bouton on a "clique"
-                    String libelleObjet = boutonClique.getId(); //l'id FXML de l'image = type du piège (ex: "BARRICADE_BOIS")
+                    TypePiege typePiege = TypePiege.valueOf(boutonClique.getId()); //l'id FXML de l'image = type du piège (ex: "BARRICADE_BOIS")
 
-                    if (partie.getOr().get() >= fabriquePiege.getCoutPour(libelleObjet)) {
+                    if (partie.getOr().get() >= fabriquePiege.getCoutPour(typePiege)) {
                         Dragboard db = boutonClique.startDragAndDrop(TransferMode.ANY);     //méthode qui commence le drag and drop
                                                                                             //transporte un presse-papier avec
 
@@ -64,7 +65,7 @@ public class DragAndDrop {
 
                         //Transmet le type du piège via le presse-papier interne
                         ClipboardContent content = new ClipboardContent();
-                        content.putString(libelleObjet);
+                        content.putString(typePiege.name());
                         db.setContent(content);
 
                         event.consume();        //arrête l'événement proprement
@@ -80,7 +81,7 @@ public class DragAndDrop {
             if (event.getGestureSource() != panneauTuile && event.getDragboard().hasString()) {
                 double x = event.getX();
                 double y = event.getY();
-                String type = event.getDragboard().getString();
+                TypePiege type = TypePiege.valueOf(event.getDragboard().getString());
 
                 //Vérifie que la case est de l'herbe (posable) et pas un obstacle
                 if (partie.getCarte().peutPoserPiege(x, y, type)) {
@@ -98,7 +99,7 @@ public class DragAndDrop {
             boolean succes = false;
 
             if (db.hasString() && !controleur.isPaused()) {
-                String typePiegeEnCours = db.getString();       //reconnait le type de piège (son id)
+                TypePiege typePiegeEnCours = TypePiege.valueOf(db.getString());       //reconnait le type de piège (son id)
                 int col = (int) (event.getX() / tailleTuile);
                 int lig = (int) (event.getY() / tailleTuile);
 

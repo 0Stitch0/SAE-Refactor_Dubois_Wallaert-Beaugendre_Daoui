@@ -1,6 +1,8 @@
 
 package universite_paris8.iut.mdubois.killer_princess.modele;
 
+import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.TypeEnnemi;
+
 import java.util.ArrayList;
 
 public class GestionnaireVagues {
@@ -34,11 +36,11 @@ public class GestionnaireVagues {
         Vague vague = new Vague(1);
 
         GroupeParVague groupe1 = new GroupeParVague(11);
-        ajouterEnnemi(groupe1, "GOBELIN", 2);
+        ajouterEnnemi(groupe1, TypeEnnemi.GOBELIN, 2);
 
         GroupeParVague groupe2 = new GroupeParVague(9);
-        ajouterEnnemi(groupe2, "GOBELIN", 1);
-        ajouterEnnemi(groupe2, "CHEVALIER", 1);
+        ajouterEnnemi(groupe2, TypeEnnemi.GOBELIN, 1);
+        ajouterEnnemi(groupe2, TypeEnnemi.CHEVALIER, 1);
 
         vague.ajouterGroupe(groupe1);
         vague.ajouterGroupe(groupe2);
@@ -50,12 +52,12 @@ public class GestionnaireVagues {
         Vague vague = new Vague(2);
 
         GroupeParVague groupe1 = new GroupeParVague(9);
-        ajouterEnnemi(groupe1, "GOBELIN", 2);
-        ajouterEnnemi(groupe1, "CHEVALIER", 1);
+        ajouterEnnemi(groupe1, TypeEnnemi.GOBELIN, 2);
+        ajouterEnnemi(groupe1, TypeEnnemi.CHEVALIER, 1);
 
         GroupeParVague groupe2 = new GroupeParVague(8);
-        ajouterEnnemi(groupe2, "CHEVALIER", 2);
-        ajouterEnnemi(groupe2, "SHREK", 1);
+        ajouterEnnemi(groupe2, TypeEnnemi.CHEVALIER, 2);
+        ajouterEnnemi(groupe2, TypeEnnemi.SHREK, 1);
 
         vague.ajouterGroupe(groupe1);
         vague.ajouterGroupe(groupe2);
@@ -67,16 +69,16 @@ public class GestionnaireVagues {
         Vague vague = new Vague(3);
 
         GroupeParVague groupe1 = new GroupeParVague(9);
-        ajouterEnnemi(groupe1, "GOBELIN", 2);
-        ajouterEnnemi(groupe1, "CHEVALIER", 1);
+        ajouterEnnemi(groupe1, TypeEnnemi.GOBELIN, 2);
+        ajouterEnnemi(groupe1, TypeEnnemi.CHEVALIER, 1);
 
         GroupeParVague groupe2 = new GroupeParVague(8);
-        ajouterEnnemi(groupe2, "SHREK", 1);
-        ajouterEnnemi(groupe2, "PRINCE", 1);
+        ajouterEnnemi(groupe2, TypeEnnemi.SHREK, 1);
+        ajouterEnnemi(groupe2, TypeEnnemi.PRINCE, 1);
 
         GroupeParVague groupe3 = new GroupeParVague(9);
-        ajouterEnnemi(groupe3, "CHEVALIER", 1);
-        ajouterEnnemi(groupe3, "GOBELIN", 2);
+        ajouterEnnemi(groupe3, TypeEnnemi.CHEVALIER, 1);
+        ajouterEnnemi(groupe3, TypeEnnemi.GOBELIN, 2);
 
         vague.ajouterGroupe(groupe1);
         vague.ajouterGroupe(groupe2);
@@ -89,16 +91,16 @@ public class GestionnaireVagues {
         Vague vague = new Vague(4);
 
         GroupeParVague groupe1 = new GroupeParVague(8);
-        ajouterEnnemi(groupe1, "GOBELIN", 2);
-        ajouterEnnemi(groupe1, "CHEVALIER", 2);
+        ajouterEnnemi(groupe1, TypeEnnemi.GOBELIN, 2);
+        ajouterEnnemi(groupe1, TypeEnnemi.CHEVALIER, 2);
 
         GroupeParVague groupe2 = new GroupeParVague(8);
-        ajouterEnnemi(groupe2, "SHREK", 1);
-        ajouterEnnemi(groupe2, "PRINCE", 1);
+        ajouterEnnemi(groupe2, TypeEnnemi.SHREK, 1);
+        ajouterEnnemi(groupe2, TypeEnnemi.PRINCE, 1);
 
         GroupeParVague groupe3 = new GroupeParVague(7);
-        ajouterEnnemi(groupe3, "CHEVALIER", 2);
-        ajouterEnnemi(groupe3, "GOBELIN", 2);
+        ajouterEnnemi(groupe3, TypeEnnemi.CHEVALIER, 2);
+        ajouterEnnemi(groupe3, TypeEnnemi.GOBELIN, 2);
 
         vague.ajouterGroupe(groupe1);
         vague.ajouterGroupe(groupe2);
@@ -111,16 +113,16 @@ public class GestionnaireVagues {
         Vague vague = new Vague(5);
 
         GroupeParVague groupe1 = new GroupeParVague(8);
-        ajouterEnnemi(groupe1, "GOBELIN", 2);
-        ajouterEnnemi(groupe1, "CHEVALIER", 2);
+        ajouterEnnemi(groupe1, TypeEnnemi.GOBELIN, 2);
+        ajouterEnnemi(groupe1, TypeEnnemi.CHEVALIER, 2);
 
         GroupeParVague groupe2 = new GroupeParVague(7);
-        ajouterEnnemi(groupe2, "SHREK", 1);
-        ajouterEnnemi(groupe2, "PRINCE", 1);
+        ajouterEnnemi(groupe2, TypeEnnemi.SHREK, 1);
+        ajouterEnnemi(groupe2, TypeEnnemi.PRINCE, 1);
 
         GroupeParVague groupe3 = new GroupeParVague(7);
-        ajouterEnnemi(groupe3, "CHEVALIER", 2);
-        ajouterEnnemi(groupe3, "PRINCE", 1);
+        ajouterEnnemi(groupe3, TypeEnnemi.CHEVALIER, 2);
+        ajouterEnnemi(groupe3, TypeEnnemi.PRINCE, 1);
 
         GroupeParVague groupe4 = new GroupeParVague(6);
 
@@ -145,7 +147,7 @@ public class GestionnaireVagues {
 
     // Ajoute un type d'ennemi et sa quantité à un groupe
     private void ajouterEnnemi(
-            GroupeParVague groupe, String type, int nombre) {
+            GroupeParVague groupe, TypeEnnemi type, int nombre) {
         groupe.ajouterEnnemi(type, nombre);
     }
 
