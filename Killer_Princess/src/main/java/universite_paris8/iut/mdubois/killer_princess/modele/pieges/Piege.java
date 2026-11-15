@@ -72,6 +72,14 @@ public abstract class Piege extends Entite {
         return true;
     }
 
+    public Ennemi getCibleActuelle() {
+        return null;
+    }
+
+    public String getNomProjectil() {
+        return null;
+    }
+
     protected abstract boolean appliquerEffet(ArrayList<Ennemi> ennemiSurCase); //renvois true si l'effet a été appliqué et déclenche le cooldown
 
     /**

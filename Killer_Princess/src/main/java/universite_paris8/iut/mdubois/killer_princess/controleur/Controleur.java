@@ -295,17 +295,9 @@ public class Controleur implements Initializable {
      */
     private void mettreAJourProjectils() {
         for (Piege p : new ArrayList<>(partie.getListePieges())) {
-            if (p instanceof Canon canon) {
-                Ennemi cible = canon.getCibleActuelle();
-                if (cible != null) {
-                    vueProjectil.lancerBoulet(canon, cible, paneEntitee);
-                }
-            }
-            if (p instanceof TourDarchers tourArcher) {
-                Ennemi cible = tourArcher.getCibleActuelle();
-                if (cible != null) {
-                    vueProjectil.lancerFleche(tourArcher, cible, paneEntitee);
-                }
+            Ennemi cible = p.getCibleActuelle();
+            if (cible != null) {
+                vueProjectil.lancerProjectil(p, cible, paneEntitee);
             }
         }
     }

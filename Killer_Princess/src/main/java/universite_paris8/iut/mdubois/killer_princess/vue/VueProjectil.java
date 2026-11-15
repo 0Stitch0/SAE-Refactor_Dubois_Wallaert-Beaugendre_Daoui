@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
+import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Piege;
 import universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours.Canon;
 import universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours.TourDarchers;
 
@@ -62,15 +63,11 @@ public class VueProjectil {
         );
     }
 
-    public void lancerBoulet(Canon canon, Ennemi cible, Pane pan) {
-        lancerProjectil("boulet", canon.getX(), canon.getY(), cible, pan);
+    public void lancerProjectil(Piege piege, Ennemi cible, Pane pan) { // méthode appelé par le controleur pour definir les arguments
+        lancerProjectil(piege.getNomProjectil(), piege.getX(), piege.getY(), cible, pan);
     }
 
-    public void lancerFleche(TourDarchers tour, Ennemi cible, Pane pan) {
-        lancerProjectil("fleche", tour.getX(), tour.getY(), cible, pan);
-    }
-
-    private void lancerProjectil(
+    private void lancerProjectil( // méthode qui lance le projectile
             String nomProject,
             double departX,
             double departY,
