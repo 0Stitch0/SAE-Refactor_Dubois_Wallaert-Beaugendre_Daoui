@@ -2,26 +2,26 @@ package universite_paris8.iut.mdubois.killer_princess.controleur.chrono;
 
 import javafx.animation.Timeline;
 
-//classe de base de tous les chronomètres du jeu, arrêter, pause, reprendre.
+//classe de base de tous les chronomètres du jeu, arrêter, pause, reprendre
 
-public abstract class ChronoJeu {
+public abstract class ChronoJeu{
     protected Timeline timeline = new Timeline();
 
-    public void arreter() {
+    public void arreter(){
         timeline.stop();
     }
 
-    public void pause() {
+    public void pause(){
         timeline.pause();
     }
 
-    public void reprendre() {
+    public void reprendre(){
         if(timeline.getStatus() == Timeline.Status.PAUSED){
             timeline.play();
         }
     }
 
-    public boolean enCours() {
+    public boolean enCours(){
         return timeline.getStatus() == Timeline.Status.RUNNING;
     }
 }

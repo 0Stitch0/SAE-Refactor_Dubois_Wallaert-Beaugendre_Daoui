@@ -92,36 +92,6 @@
       <StackPane fx:id="inventaire" mouseTransparent="false" style="-fx-background-color: grey; -fx-padding: 10;">
           <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-padding: 5" BorderPane.alignment="BOTTOM_CENTER">
               <children>
-                  <!-- Squelette -->
-                  <VBox fx:id="cartePiege1" prefHeight="100.0" prefWidth="90.0" style="-fx-background-color: #C2B8B8;-fx-background-radius: 15;-fx-border-radius: 15; -fx-padding: 10;">
-                      <children>
-                          <ImageView fx:id="squelette" fitHeight="69.0" fitWidth="78.0" pickOnBounds="true">
-                              <image>
-                                  <Image url="@Piege/Inventaire/squeletteChapeau.png" />
-                              </image>
-                          </ImageView>
-                          <HBox prefHeight="34.0" prefWidth="70.0">
-                              <children>
-                                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="53.0" text="15" textAlignment="CENTER" />
-                                  <ImageView fitHeight="27.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
-                                      <image>
-                                          <Image url="@Piege/Inventaire/piece.png" />
-                                      </image>
-                                  </ImageView>
-                              </children>
-                              <VBox.margin>
-                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                              </VBox.margin>
-                          </HBox>
-                      </children>
-                      <padding>
-                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                      </padding>
-                      <HBox.margin>
-                          <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                      </HBox.margin>
-                  </VBox>
-
                   <!-- Barricade Bois -->
                   <VBox fx:id="cartePiege2" prefHeight="100.0" prefWidth="90.0" style="-fx-background-color: #C2B8B8;-fx-background-radius: 15;-fx-border-radius: 15; -fx-padding: 10;">
                       <children>

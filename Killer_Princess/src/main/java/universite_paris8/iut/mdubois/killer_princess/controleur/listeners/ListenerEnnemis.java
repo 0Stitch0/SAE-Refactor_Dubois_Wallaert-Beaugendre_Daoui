@@ -6,26 +6,26 @@ import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
 import universite_paris8.iut.mdubois.killer_princess.modele.Jeu;
 import universite_paris8.iut.mdubois.killer_princess.vue.VueEnnemis;
 
-public class ListenerEnnemis implements StategieListener {
+public class ListenerEnnemis implements StategieListener{
     private final Jeu partie;
     private final VueEnnemis vueEnnemis;
     private final Pane paneEntitee;
 
-    public ListenerEnnemis(Jeu partie, VueEnnemis vueEnnemis, Pane paneEntitee) {
+    public ListenerEnnemis(Jeu partie, VueEnnemis vueEnnemis, Pane paneEntitee){
         this.partie = partie;
         this.vueEnnemis = vueEnnemis;
         this.paneEntitee = paneEntitee;
     }
 
     @Override
-    public void activer() {
+    public void activer(){
         partie.getListeEnnemis().addListener((ListChangeListener<Ennemi>) change -> {
-            while (change.next()) {
-                //Un ennemi apparait pendant les vagues
-                if (change.wasAdded()) {
-                    for (Ennemi nouvelEnnemi : change.getAddedSubList()) {
+            while (change.next()){
+            //un ennemi apparaît pendant les vagues
+                if (change.wasAdded()){//si élément ajouter = true
+                    for (Ennemi nouvelEnnemi : change.getAddedSubList()){
                         vueEnnemis.creerVuePourEnnemi(nouvelEnnemi);
-                        // Change image si attaque ou run
+                    //change l'image si l'ennemi est en: attaque ou marche
                         nouvelEnnemi.attaqueProperty().addListener((obs, oldVal, newVal) -> {
                             if(newVal){
                                 vueEnnemis.imageEnnemieEnAttaque(nouvelEnnemi);
@@ -36,9 +36,9 @@ public class ListenerEnnemis implements StategieListener {
                         });
                     }
                 }
-                //Un ennemi meurt
-                if (change.wasRemoved()) {
-                    for (Ennemi ennemiMort : change.getRemoved()) {
+            //un ennemi meurt
+                if (change.wasRemoved()){
+                    for (Ennemi ennemiMort : change.getRemoved()){
                         vueEnnemis.supprimerEnnemiDeLaMap(ennemiMort, paneEntitee);
                     }
                 }

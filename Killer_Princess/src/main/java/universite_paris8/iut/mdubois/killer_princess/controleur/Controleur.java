@@ -14,30 +14,24 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import universite_paris8.iut.mdubois.killer_princess.controleur.chrono.GestionnairePause;
 import universite_paris8.iut.mdubois.killer_princess.controleur.listeners.ListenerJeu;
-import universite_paris8.iut.mdubois.killer_princess.controleur.modesJeu.ModeJeu;
-import universite_paris8.iut.mdubois.killer_princess.controleur.modesJeu.ModeSurvie;
-import universite_paris8.iut.mdubois.killer_princess.controleur.modesJeu.ModeVagues;
-import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.ApparitionParGroupe;
-import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.ApparitionUnParUn;
-import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.StrategieApparition;
+import universite_paris8.iut.mdubois.killer_princess.controleur.modesJeu.*;
+import universite_paris8.iut.mdubois.killer_princess.controleur.spawn.*;
 import universite_paris8.iut.mdubois.killer_princess.modele.*;
 import universite_paris8.iut.mdubois.killer_princess.modele.ennemis.Ennemi;
-import universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours.Canon;
 import universite_paris8.iut.mdubois.killer_princess.modele.pieges.Piege;
-import universite_paris8.iut.mdubois.killer_princess.modele.pieges.tours.TourDarchers;
 import universite_paris8.iut.mdubois.killer_princess.vue.*;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
 import static universite_paris8.iut.mdubois.killer_princess.controleur.ControleurMenu.mapSelectionnee;
+
 
 public class Controleur implements Initializable {
     private Carte carte;
     private VueCarte vueCarte;
-    private Ennemi ennemis;
     private VueEnnemis vueEnnemis;
     private VuePiege vuePiege;
     private VueProjectil vueProjectil;
@@ -50,27 +44,25 @@ public class Controleur implements Initializable {
     private ModeJeu modeJeu;
     private DragAndDrop gnd;
     private int temps, numeroMapActuelle = 1;
-    private boolean isPaused = false;
-    private ArrayList<Ennemi> fileAttenteSpawn = new ArrayList<>();
+    private GestionnairePause gestionnairePause;
 
     @FXML BorderPane root;
     @FXML private Pane paneEntitee, menuJeu;
     @FXML private StackPane inventaire, ecranFinPartie;
     @FXML private HBox top;
-    @FXML private VBox cartePiege1, cartePiege2, cartePiege3, cartePiege4, cartePiege5, cartePiege6;
+    @FXML private VBox cartePiege2, cartePiege3, cartePiege4, cartePiege5, cartePiege6;
     @FXML private TilePane panneauTuile;
     @FXML private Label goldDisplay, waveDisplay, chrono;
     @FXML private ImageView BARRICADE_BOIS, TRAPPE, MAGMA, TOUR_ARCHERS, CANON, iconPause, iconMenu, restartGame, backToMenu, returnMenu, nouvelleVague, trois, deux, un, victoire, perte, imagePrincesse, imageDragon;
     @FXML private BoxBlur blur;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle){
 
         initialiseModele();
         initialiseVues();
         initiliseInterface();
         initialiseListener();
-        //creationEnnemi = new FabriqueInstance(partie);
 
         configurerDragAndDrop();
         modeJeu.demarrer();
@@ -84,7 +76,7 @@ public class Controleur implements Initializable {
         chrono.textProperty().bind(chronometre.asString());
     }
 
-
+// fais les initialisations lors de l'appel de la classe
     public void initialiseModele(){
         partie = new Jeu(mapSelectionnee);
         carte = new Carte(mapSelectionnee);
@@ -93,24 +85,26 @@ public class Controleur implements Initializable {
         fabriqueInstance = fabriquePiege;
         strategieApparition = choisirStrategieApparition();
         modeJeu = choisirModeDeJeu();
+        gestionnairePause = new GestionnairePause(gameLoop, modeJeu);
     }
 
-    // Choix de la façon dont les ennemis apparaissent selon la map (fait une seule fois)
-    private StrategieApparition choisirStrategieApparition() {
-        if (mapSelectionnee == 1) {
+//choix en fonction de la carte pour l'apparition (spwan) des ennemis
+    private StrategieApparition choisirStrategieApparition(){
+        if (mapSelectionnee == 1){
             return new ApparitionParGroupe(partie, spawner);
         }
         return new ApparitionUnParUn(partie, spawner);
     }
 
-    // Choix du mode de jeu (survie ou vagues), fait une seule fois
-    private ModeJeu choisirModeDeJeu() {
-        if (ControleurMenu.survie) {
+//choix du mode de jeu (survie ou vagues)
+    private ModeJeu choisirModeDeJeu(){
+        if (ControleurMenu.survie){
             return new ModeSurvie(partie, fabriqueInstance);
         }
         return new ModeVagues(partie, strategieApparition, nouvelleVague, trois, deux, un);
     }
 
+// initialise les vues
     public void initialiseVues(){
         vueCarte = new VueCarte(panneauTuile, carte);
         vueEnnemis = new VueEnnemis(paneEntitee);
@@ -119,23 +113,26 @@ public class Controleur implements Initializable {
         vueProjectil = new VueProjectil();
     }
 
+//initialise l'inventaire/ affichage de base quand on joue
     public void initiliseInterface(){
         blur = new BoxBlur();
-        inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
+        inventaire.setTranslateY(-100); //déplace l'inventaire de 20 pixels vers le haut
         gnd = new DragAndDrop(panneauTuile, fabriquePiege, paneEntitee, partie, this);
     }
 
+//inutilisée les listeneur (ennemis, pièges)
     public void initialiseListener(){
         new ListenerJeu(partie, vuePiege, vueEnnemis, paneEntitee, gnd).activer();
     }
 
-    private void configurerDragAndDrop() {
+//configure le drag and drop avec les éléments qui peuvent être drag and drop
+    private void configurerDragAndDrop(){
         gnd.configurerSourceDrag(BARRICADE_BOIS, TRAPPE, MAGMA, TOUR_ARCHERS, CANON);
         gnd.configurerCibleDrag();
     }
 
-    //changement des images du chateau pour la map2
-    private void changerImagesCarte2() {
+//changement des images du château pour la carte 2 (là où il est + taille)
+    private void changerImagesCarte2(){
         if(mapSelectionnee == 2){
             imagePrincesse.setTranslateX(400);
             imagePrincesse.setTranslateY(-45);
@@ -148,10 +145,11 @@ public class Controleur implements Initializable {
         }
     }
 
+//met un effet de grossissement quand la souris passe sur les cartes de l'inventaire ou des boutons pour les paramétrer
     private void appliquerHovers(){
         // Hover sur les cartes
-        VBox[] cartePiege = {cartePiege1, cartePiege2, cartePiege3, cartePiege4, cartePiege5, cartePiege6};
-        for(VBox carte : cartePiege) {
+        VBox[] cartePiege = { cartePiege2, cartePiege3, cartePiege4, cartePiege5, cartePiege6};
+        for(VBox carte : cartePiege){
             Style.styleCarteHover(carte);
         }
         // Hover menu Bouton
@@ -161,6 +159,7 @@ public class Controleur implements Initializable {
         }
     }
 
+//mets en place l'inventaire en bas et la barre en haut dans la fenêtre de jeu
     private void configurerAffichage(){
         inventaire.setTranslateY(-100); // Déplace l'inventaire de 20 pixels vers le haut
 
@@ -175,22 +174,24 @@ public class Controleur implements Initializable {
         waveDisplay.textProperty().bind( partie.getVague().asString("Vague : %d / " + nbTotalVagues) );
     }
 
+//pour l'attaque du dragon
     @FXML
-    public void Dragon() {
-        if (!isPaused) {
+    public void Dragon(){
+        if (!gestionnairePause.isPaused()){
             partie.declencherBouleDeFeu();
         }
     }
 
-    // Menu du Jeu
+//menu du Jeu
     @FXML
     public void menuJeu(){
         Son.getInstance().bruitageSelection();
         afficherMenuPause(true);
-        if(!isPaused)
-            switchPause();
+        if(!gestionnairePause.isPaused())
+            gestionnairePause.basculer();
     }
 
+//ramène au menu principal (menu d'arrivée)
     @FXML
     public void backToMenu() throws Exception{
         Son.getInstance().bruitageSelection();
@@ -202,27 +203,30 @@ public class Controleur implements Initializable {
 //        }
     }
 
+//relance la partie
     @FXML
     public void restartGame() throws Exception{
         Son.getInstance().bruitageSelection();
         chargerScene("view.fxml");
     }
 
+//reprends la partie là où on en était
     @FXML
     public void returnToGame(){
         Son.getInstance().bruitageSelection();
         afficherMenuPause(false);
-        switchPause();
+        gestionnairePause.basculer();
     }
 
-    private void afficherMenuPause(boolean afficher) {
-        if (afficher) {
+//pour l'affichage du menu pause, qui floute la carte et affiche les options si on veut quitter ou revenir à notre partie
+    private void afficherMenuPause(boolean afficher){
+        if (afficher){
             blur.setIterations(1);
             panneauTuile.setEffect(blur);
             paneEntitee.setEffect(blur);
             inventaire.setEffect(blur);
             top.setEffect(blur);
-        } else {
+        } else{
             blur.setIterations(0);
         }
         menuJeu.setOpacity(afficher ? 1 : 0);
@@ -231,8 +235,8 @@ public class Controleur implements Initializable {
         inventaire.setMouseTransparent(afficher);
     }
 
-    // Charge la scène dont on donne le nom du fichier fxml
-    private void chargerScene(String fichier) throws Exception {
+//charge la scène dont on donne le nom du fichier fxml
+    private void chargerScene(String fichier) throws Exception{
         FXMLLoader vueFx = new FXMLLoader(getClass().getResource("/universite_paris8/iut/mdubois/killer_princess/" + fichier));
         Pane rootJeu = vueFx.load();
         Stage stage = (Stage) root.getScene().getWindow();
@@ -240,91 +244,81 @@ public class Controleur implements Initializable {
         stage.show();
     }
 
-    private void initAnimation() {
+    private void initAnimation(){
         gameLoop= new Timeline();
         temps= 0;
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame kf = new KeyFrame(
-                // on définit le FPS (nbre de frame par seconde)
+            //définit le FPS (nbre de frames par seconde)
                 Duration.seconds(0.017),
-                // c'est un eventHandler d'ou le lambda on définit ce qui se passe à chaque frame
+            //un eventHandler, d'où le lambda, on définit ce qui se passe à chaque frame
                 (ev -> mettreAJourFrame())
         );
         gameLoop.getKeyFrames().add(kf);
     }
 
-    // Ce qui se passe à chaque frame
-    private void mettreAJourFrame() {
-        //pas de if pour mouvement lisse pas sacadé
-        if (this.isPaused) {
+//ce qui se passe à chaque frame
+    private void mettreAJourFrame(){
+    //pas da if pour mouvement lisse, pas sacadé
+        if (gestionnairePause.isPaused()){
             return;
         }
-        if (!partie.estPartiePerdue() && !partie.estPartieGagnee()) {
+        if (!partie.estPartiePerdue() && !partie.estPartieGagnee()){
             partie.mettreAJour();
             temps++;
             mettreAJourProjectils();
 
             modeJeu.mettreAJour();
-        } else {
+        } else{
             terminerPartie();
         }
     }
 
-    // Affiche l'écran de fin (victoire ou défaite) et arrête le jeu
-    private void terminerPartie() {
+//affiche l'écran de fin (victoire ou défaite) et arrête le jeu
+    private void terminerPartie(){
         ecranFinPartie.setOpacity(1.0);
         ecranFinPartie.setMouseTransparent(false);
 
-        if (partie.estPartiePerdue()) {
+        if (partie.estPartiePerdue()){
             perte.setOpacity(1);
             affichageFinPartie(perte);
-        } else {
+        } else{
             victoire.setOpacity(1);
             affichageFinPartie(victoire);
         }
         finPartie();
     }
 
-    public void affichageFinPartie(ImageView i) {
+    public void affichageFinPartie(ImageView i){
         menuJeu();
         menuJeu.getChildren().add(i);
     }
-    /**
-     * ça permet d'avoir les boulet ou fleche d'afficher quand
-     * canon et la tour d'achers son mise et attaque
-     */
-    private void mettreAJourProjectils() {
-        for (Piege p : new ArrayList<>(partie.getListePieges())) {
+
+// permet d'avoir les boulets ou flèches d'afficher quand le canon et la tour d'archers attaque un ennemi
+    private void mettreAJourProjectils(){
+        for (Piege p : new ArrayList<>(partie.getListePieges())){
             Ennemi cible = p.getCibleActuelle();
-            if (cible != null) {
+            if (cible != null){
                 vueProjectil.lancerProjectil(p, cible, paneEntitee);
             }
         }
     }
 
+//mets en pause le jeu et mets le son pour la sélection
     @FXML
     public void basculerPause(){
         Son.getInstance().bruitageSelection();
-        switchPause();
-    }
-    public void finPartie() {
-        gameLoop.stop();
-        modeJeu.arreter();
+        gestionnairePause.basculer();
     }
 
-    public void switchPause(){
-        this.isPaused = !this.isPaused;
-        if(this.isPaused){
-            gameLoop.pause();
-            modeJeu.pause();
-        } else {                //sinon (booléen faux) on remet en marche la boucle et le mode de jeu
-            gameLoop.play();
-            modeJeu.reprendre();
-        }
+//arrête le jeu
+    public void finPartie(){
+        gestionnairePause.arreter();
     }
 
+//mets la partie en pause
     public boolean isPaused(){
-        return this.isPaused;
+        return gestionnairePause.isPaused();
     }
 }
